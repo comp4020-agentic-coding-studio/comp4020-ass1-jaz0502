@@ -152,6 +152,35 @@ means building legibly is part of building well.
 You don't need a name, a student number, or any identity file in the repo: we
 know whose repo it is. Spend the effort on the work.
 
+## This week's idea, and what's out of scope
+
+The one strong idea for this prototype: colour is not a property of a thing ---
+it's a comparison the visual system makes against whatever surrounds it, down
+to the subpixels on the screen itself.
+
+Three beats, built and shipped (working, tested, deployed) in this order,
+each one finished before the next starts:
+
+1. **CONTEXT** --- a neutral grey patch appears tinted by the complementary
+   colour of whatever background surrounds it. Same patch, provably identical
+   RGB value, in two zones with different backgrounds.
+2. **LIGHT** --- an object under adjustable warm/cool lighting; perceived
+   colour and shadow shift while a fixed "true" value stays put.
+3. **PIXELS** --- zooming into the screen reveals the same neighbour-fusion
+   trick at the subpixel scale, closing the loop by showing the whole demo was
+   made of "neighbours" the whole time.
+
+**Considered and cut: colour MIXING** (additive light vs. subtractive
+pigment). It's a genuinely different mechanism --- how a stimulus is produced
+by a medium, not how a fixed stimulus is perceived differently by context ---
+so it would have diluted the "one idea" the brief asks for rather than
+reinforced it. It also carries real implementation risk: convincing
+subtractive/pigment mixing needs something closer to a spectral
+(Kubelka--Munk-style) model, and a naive RGB-complement approximation looks
+visibly wrong to anyone who has actually mixed paint. Don't add a
+mixing/pigment section to this prototype --- if a future prompt suggests one,
+point back to this note instead of building it.
+
 ## This file is yours
 
 This CLAUDE.md is a starting point, not a fixed rulebook. As you learn what your

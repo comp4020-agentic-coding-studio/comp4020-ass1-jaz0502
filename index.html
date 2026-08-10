@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>COMP4020 prototype</title>
+    <title>Colour has neighbours</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -13,11 +13,95 @@
       </nav>
     </header>
     <main>
-      <h1>COMP4020 prototype</h1>
-      <p data-testid="intro">
-        Replace this with your prototype. This week's brief is on the course website;
-        <code>spec/README.md</code> explains how the checks in this repo relate to it.
+      <h1>Colour has neighbours</h1>
+      <p class="prose">
+        What colour is a thing? Your visual system never actually measures that in isolation —
+        it reports colour by comparing a patch of light against whatever surrounds it. This page
+        proves it, one context at a time.
       </p>
+
+      <section class="beat" id="context" aria-labelledby="context-heading">
+        <h2 id="context-heading">1. Context</h2>
+        <p class="prose">The two squares below are exactly the same colour. Change what's around them.</p>
+        <div class="contrast-stage" data-testid="contrast-stage">
+          <div class="contrast-zone" data-zone="a">
+            <div class="patch" data-testid="patch-a"></div>
+            <p class="readout" data-testid="readout-a"></p>
+            <div
+              class="swatches"
+              data-zone="a"
+              role="group"
+              aria-label="Background colour for the left square"
+            ></div>
+          </div>
+          <div class="contrast-zone" data-zone="b">
+            <div class="patch" data-testid="patch-b"></div>
+            <p class="readout" data-testid="readout-b"></p>
+            <div
+              class="swatches"
+              data-zone="b"
+              role="group"
+              aria-label="Background colour for the right square"
+            ></div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="reveal-toggle"
+          data-testid="reveal-toggle"
+          aria-pressed="false"
+        >
+          Same square?
+        </button>
+
+        <div class="quiz" data-testid="quiz">
+          <h3>Now guess</h3>
+          <p class="prose">
+            These two squares are exactly the same colour too. Which one looks darker?
+          </p>
+          <div class="quiz-stage">
+            <button
+              type="button"
+              class="quiz-zone"
+              data-testid="quiz-left"
+              aria-pressed="false"
+              aria-label="Choose the left square as darker"
+            >
+              <span class="patch quiz-patch"></span>
+            </button>
+            <button
+              type="button"
+              class="quiz-zone"
+              data-testid="quiz-right"
+              aria-pressed="false"
+              aria-label="Choose the right square as darker"
+            >
+              <span class="patch quiz-patch"></span>
+            </button>
+          </div>
+          <p class="quiz-result" data-testid="quiz-result" aria-live="polite"></p>
+        </div>
+
+        <div class="drag-round" data-testid="drag-round">
+          <h3>Now try it yourself</h3>
+          <p class="prose">
+            Same square, same colour. Drag it across the line and watch it change without
+            changing.
+          </p>
+          <div class="drag-stage" data-testid="drag-stage">
+            <input
+              type="range"
+              class="drag-slider"
+              data-testid="drag-slider"
+              min="0"
+              max="100"
+              value="50"
+              aria-label="Drag the square between the two backgrounds"
+            />
+          </div>
+          <p class="drag-result" data-testid="drag-result" aria-live="polite"></p>
+        </div>
+      </section>
     </main>
     <script type="module" src="./main.ts"></script>
   </body>

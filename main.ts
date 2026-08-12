@@ -23,6 +23,7 @@ import {
   sideFromPosition,
   type DragState,
 } from "./drag";
+import { pickActiveSection, type SectionVisibility } from "./background";
 
 const HUE_NAMES: Record<number, string> = {
   0: "Red",
@@ -160,3 +161,28 @@ dragSlider?.addEventListener("input", () => {
   renderDrag();
 });
 renderDrag();
+
+const bgSections = document.querySelectorAll<HTMLElement>("[data-bg-id]");
+const bgLayers = document.querySelectorAll<HTMLElement>(".bg-layer");
+const sectionRatios = new Map<string, number>();
+
+function renderBackground() {
+  const entries: SectionVisibility[] = [...sectionRatios].map(([id, ratio]) => ({ id, ratio }));
+  const active = pickActiveSection(entries);
+  for (const layer of bgLayers) {
+    layer.classList.toggle("is-active", layer.dataset.bg === active);
+  }
+}
+
+const bgObserver = new IntersectionObserver(
+  (entries) => {
+    for (const entry of entries) {
+      const id = entry.target.getAttribute("data-bg-id");
+      if (id) sectionRatios.set(id, entry.intersectionRatio);
+    }
+    renderBackground();
+  },
+  { threshold: [0, 0.25, 0.5, 0.75, 1] },
+);
+
+for (const section of bgSections) bgObserver.observe(section);

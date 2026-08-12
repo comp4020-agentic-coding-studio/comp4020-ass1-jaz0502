@@ -7,22 +7,52 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div class="bg-layers" aria-hidden="true">
+      <div class="bg-layer" data-bg="hero"></div>
+      <div class="bg-layer" data-bg="context"></div>
+    </div>
     <header>
       <nav aria-label="Primary">
         <a href="./">Home</a>
       </nav>
     </header>
     <main>
-      <h1>Colour has neighbours</h1>
-      <p class="prose">
-        What colour is a thing? Your visual system never actually measures that in isolation —
-        it reports colour by comparing a patch of light against whatever surrounds it. This page
-        proves it, one context at a time.
-      </p>
+      <section class="hero" id="hero" data-bg-id="hero">
+        <p class="hero-kicker">Colour has neighbours</p>
+        <h1 class="hero-title">THE COLOUR<br />YOU SEE</h1>
+        <p class="hero-subtitle">isn't always the colour that's there.</p>
+        <a class="scroll-cue" href="#context">
+          <span>Scroll</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path
+              d="M4 8l8 8 8-8"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+        <div class="hero-shapes" aria-hidden="true">
+          <div class="hero-shape hero-shape-circle"></div>
+          <div class="hero-shape hero-shape-ring"></div>
+          <div class="hero-shape hero-shape-triangle"></div>
+          <div class="hero-shape hero-shape-arc"></div>
+          <div class="hero-shape hero-shape-dot"></div>
+        </div>
+      </section>
 
-      <section class="beat" id="context" aria-labelledby="context-heading">
-        <h2 id="context-heading">1. Context</h2>
-        <p class="prose">The two squares below are exactly the same colour. Change what's around them.</p>
+      <div class="content">
+        <p class="prose">
+          What colour is a thing? Your visual system never actually measures that in isolation —
+          it reports colour by comparing a patch of light against whatever surrounds it. This page
+          proves it, one context at a time.
+        </p>
+
+        <section class="beat" id="context" data-bg-id="context" aria-labelledby="context-heading">
+          <h2 id="context-heading"><span class="beat-number">1</span> Context</h2>
+          <p class="prose">The two squares below are exactly the same colour. Change what's around them.</p>
         <div class="contrast-stage" data-testid="contrast-stage">
           <div class="contrast-zone" data-zone="a">
             <div class="patch" data-testid="patch-a"></div>

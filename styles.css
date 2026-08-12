@@ -1,23 +1,241 @@
+:root {
+  --canvas: #f2ede1;
+  --ink: #16130f;
+  --red: #d1352b;
+  --blue: #1d4e9b;
+  --yellow: #eeb31f;
+}
+
 body {
   margin: 0;
-  padding: 2rem 1rem;
   font-family: system-ui, sans-serif;
   line-height: 1.6;
-  color: #1a1a1a;
-  background: #fff;
+  color: var(--ink);
+  background: var(--canvas);
 }
 
 main {
+  position: relative;
+}
+
+.content {
   max-width: 56rem;
   margin: 0 auto;
+  padding: 3rem 1rem 2rem;
 }
 
 a {
-  color: #0b5fff;
+  color: var(--blue);
 }
 
 .prose {
   max-width: 38rem;
+}
+
+header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 10;
+  padding: 1.25rem 1.5rem;
+}
+
+header nav a {
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.bg-layers {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.bg-layer.is-active {
+  opacity: 1;
+}
+
+.bg-layer[data-bg="hero"] {
+  background: linear-gradient(135deg, var(--red) 0%, var(--yellow) 50%, var(--blue) 100%);
+}
+
+.bg-layer[data-bg="context"] {
+  background: linear-gradient(160deg, var(--canvas) 0%, #dbe6f2 100%);
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 6rem 1.5rem 3rem;
+  text-align: center;
+}
+
+.hero-kicker {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  z-index: 1;
+  margin: 0;
+  font-size: clamp(2.75rem, 10vw, 7rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  z-index: 1;
+  max-width: 30rem;
+  margin: 1rem 0 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  font-style: italic;
+}
+
+.scroll-cue {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 3rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.scroll-cue svg {
+  animation: bounce 1.6s ease-in-out infinite;
+}
+
+.hero-shapes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-shape {
+  position: absolute;
+  opacity: 0.85;
+}
+
+.hero-shape-circle {
+  top: 12%;
+  left: 8%;
+  width: 6rem;
+  height: 6rem;
+  background: var(--red);
+  border-radius: 50%;
+  animation: float 9s ease-in-out infinite;
+}
+
+.hero-shape-ring {
+  right: 10%;
+  bottom: 18%;
+  width: 8rem;
+  height: 8rem;
+  border: 1.25rem solid var(--blue);
+  border-radius: 50%;
+  animation: spin 22s linear infinite;
+}
+
+.hero-shape-triangle {
+  top: 20%;
+  right: 16%;
+  width: 0;
+  height: 0;
+  border-width: 0 3rem 5rem;
+  border-style: solid;
+  border-color: transparent transparent var(--yellow);
+  animation: float 11s ease-in-out infinite reverse;
+}
+
+.hero-shape-arc {
+  bottom: 8%;
+  left: 14%;
+  width: 5rem;
+  height: 5rem;
+  background: var(--yellow);
+  border-radius: 50% 50% 50% 0;
+  animation: float 8s ease-in-out infinite;
+}
+
+.hero-shape-dot {
+  top: 45%;
+  left: 45%;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--ink);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-1.5rem);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(0.4rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-shape,
+  .scroll-cue svg {
+    animation: none;
+  }
+}
+
+.beat-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--red);
+  border-radius: 0.25rem;
 }
 
 .beat {

@@ -70,6 +70,10 @@ header nav a {
   background: linear-gradient(160deg, var(--canvas) 0%, #dbe6f2 100%);
 }
 
+.bg-layer[data-bg="light"] {
+  background: linear-gradient(160deg, #f5e6c8 0%, var(--canvas) 50%, #d9e6f2 100%);
+}
+
 .hero {
   position: relative;
   display: flex;
@@ -442,6 +446,164 @@ header nav a {
   background: #6157ac;
   box-shadow: 0 0 0 1px rgb(255 255 255 / 30%);
   cursor: grab;
+}
+
+.light-stage {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+@media (width <= 40rem) {
+  .light-stage {
+    flex-direction: column;
+  }
+}
+
+.light-scene {
+  position: relative;
+  flex-shrink: 0;
+  width: 16rem;
+  height: 16rem;
+  margin: 0 auto;
+}
+
+.light-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13rem;
+  height: 13rem;
+  border: 2px dashed rgb(22 19 15 / 25%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.light-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  cursor: grab;
+  touch-action: none;
+}
+
+.light-handle:active {
+  cursor: grabbing;
+}
+
+.light-bulb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 35% 30%, #fff8dc 0%, var(--yellow) 55%, #b9860f 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 0.75rem 0.15rem rgb(238 179 31 / 55%);
+}
+
+.light-handle:focus-visible .light-bulb {
+  outline: 3px solid #0b5fff;
+  outline-offset: 2px;
+}
+
+.apple-shadow {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  width: 7rem;
+  height: 1.75rem;
+  background: var(--shadow-color, #3a1a18);
+  border-radius: 50%;
+  filter: blur(3px);
+  transition: background-color 0.3s ease;
+}
+
+.apple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8rem;
+  height: 8rem;
+  background: radial-gradient(
+    circle at calc(50% + var(--highlight-x, 0%)) calc(50% + var(--highlight-y, 0%)),
+    var(--highlight-color, #d1352b) 0%,
+    #d1352b 55%,
+    #7a1f1a 100%
+  );
+  border-radius: 50%;
+  box-shadow: inset -0.6rem -0.6rem 1.5rem rgb(0 0 0 / 20%);
+  transform: translate(-50%, -50%);
+}
+
+.apple-stem {
+  position: absolute;
+  top: -0.55rem;
+  left: 50%;
+  width: 0.35rem;
+  height: 1.1rem;
+  background: #5b3a1e;
+  border-radius: 0.15rem;
+  transform: translateX(-50%) rotate(-10deg);
+}
+
+.light-controls {
+  flex: 1;
+  min-width: 0;
+}
+
+.light-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.light-preset {
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  background: #fff;
+  border: 2px solid transparent;
+  border-radius: 999px;
+}
+
+.light-preset[aria-pressed="true"] {
+  border-color: #1a1a1a;
+}
+
+.light-readouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.light-readout {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.light-readout p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.light-readout strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.swatch-fixed,
+.swatch-live {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 15%);
 }
 
 .drag-result {

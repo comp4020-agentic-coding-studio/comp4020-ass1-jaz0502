@@ -10,6 +10,7 @@
     <div class="bg-layers" aria-hidden="true">
       <div class="bg-layer" data-bg="hero"></div>
       <div class="bg-layer" data-bg="context"></div>
+      <div class="bg-layer" data-bg="light"></div>
     </div>
     <header>
       <nav aria-label="Primary">
@@ -132,6 +133,59 @@
           <p class="drag-result" data-testid="drag-result" aria-live="polite"></p>
         </div>
       </section>
+
+      <section class="beat" id="light" data-bg-id="light" aria-labelledby="light-heading">
+        <h2 id="light-heading"><span class="beat-number">2</span> Light</h2>
+        <p class="prose">
+          This apple has exactly one colour. Drag the light around it and watch that colour
+          seem to change anyway — brighter, warmer, cooler — and the shadow it casts tint the
+          opposite way.
+        </p>
+
+        <div class="light-stage" data-testid="light-stage">
+          <div class="light-scene">
+            <div class="light-ring" data-testid="light-ring">
+              <div
+                class="light-handle"
+                data-testid="light-handle"
+                role="slider"
+                tabindex="0"
+                aria-label="Light position around the apple"
+                aria-valuemin="0"
+                aria-valuemax="360"
+                aria-valuenow="300"
+              >
+                <span class="light-bulb" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="apple-shadow" data-testid="apple-shadow" aria-hidden="true"></div>
+            <div class="apple" data-testid="apple" aria-hidden="true">
+              <div class="apple-stem" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <div class="light-controls">
+            <div
+              class="light-presets"
+              role="group"
+              aria-label="Light colour"
+              data-testid="light-presets"
+            ></div>
+
+            <div class="light-readouts">
+              <div class="light-readout">
+                <span class="swatch-fixed" data-testid="light-base-swatch" aria-hidden="true"></span>
+                <p>Material colour (fixed)<br /><strong data-testid="light-base-readout"></strong></p>
+              </div>
+              <div class="light-readout">
+                <span class="swatch-live" data-testid="light-live-swatch" aria-hidden="true"></span>
+                <p>What you're seeing<br /><strong data-testid="light-live-readout"></strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      </div>
     </main>
     <script type="module" src="./main.ts"></script>
   </body>

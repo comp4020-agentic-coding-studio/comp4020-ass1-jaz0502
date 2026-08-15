@@ -24,6 +24,19 @@ import {
   type DragState,
 } from "./drag";
 import { pickActiveSection, type SectionVisibility } from "./background";
+import {
+  angleFromPointer,
+  baseColor,
+  highlightColor,
+  highlightOffset,
+  initialLightState,
+  setAngle,
+  setPreset,
+  shadowColor,
+  shadowOffset,
+  type LightPreset,
+  type LightState,
+} from "./light";
 
 const HUE_NAMES: Record<number, string> = {
   0: "Red",
@@ -161,6 +174,116 @@ dragSlider?.addEventListener("input", () => {
   renderDrag();
 });
 renderDrag();
+
+const LIGHT_PRESETS: LightPreset[] = ["neutral", "warm", "cool"];
+const LIGHT_PRESET_LABELS: Record<LightPreset, string> = {
+  neutral: "Neutral",
+  warm: "Warm",
+  cool: "Cool",
+};
+
+let lightState: LightState = initialLightState();
+
+const lightRing = document.querySelector<HTMLElement>('[data-testid="light-ring"]');
+const lightHandle = document.querySelector<HTMLElement>('[data-testid="light-handle"]');
+const appleEl = document.querySelector<HTMLElement>('[data-testid="apple"]');
+const appleShadowEl = document.querySelector<HTMLElement>('[data-testid="apple-shadow"]');
+const lightPresetsContainer = document.querySelector<HTMLElement>('[data-testid="light-presets"]');
+const lightBaseSwatch = document.querySelector<HTMLElement>('[data-testid="light-base-swatch"]');
+const lightBaseReadout = document.querySelector<HTMLElement>('[data-testid="light-base-readout"]');
+const lightLiveSwatch = document.querySelector<HTMLElement>('[data-testid="light-live-swatch"]');
+const lightLiveReadout = document.querySelector<HTMLElement>('[data-testid="light-live-readout"]');
+
+function buildLightPresets() {
+  if (!lightPresetsContainer) return;
+  for (const preset of LIGHT_PRESETS) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "light-preset";
+    button.dataset.preset = preset;
+    button.textContent = LIGHT_PRESET_LABELS[preset];
+    button.addEventListener("click", () => {
+      lightState = setPreset(lightState, preset);
+      renderLight();
+    });
+    lightPresetsContainer.append(button);
+  }
+}
+
+function renderLight() {
+  const highlight = highlightColor(lightState);
+  const shadow = shadowColor(lightState);
+  const hOffset = highlightOffset(lightState);
+  const sOffset = shadowOffset(lightState);
+
+  appleEl?.style.setProperty("--highlight-color", highlight);
+  appleEl?.style.setProperty("--highlight-x", `${hOffset.x}%`);
+  appleEl?.style.setProperty("--highlight-y", `${hOffset.y}%`);
+
+  appleShadowEl?.style.setProperty("--shadow-color", shadow);
+  if (appleShadowEl) {
+    appleShadowEl.style.transform = `translateX(-50%) translateX(${sOffset.x}%) scaleX(${sOffset.scale})`;
+  }
+
+  const rad = (lightState.angle * Math.PI) / 180;
+  const ringRadius = (lightRing?.getBoundingClientRect().width ?? 0) / 2;
+  if (lightHandle) {
+    lightHandle.style.transform = `translate(-50%, -50%) translate(${Math.cos(rad) * ringRadius}px, ${Math.sin(rad) * ringRadius}px)`;
+    lightHandle.setAttribute("aria-valuenow", String(Math.round(lightState.angle)));
+  }
+
+  if (lightBaseSwatch) lightBaseSwatch.style.backgroundColor = baseColor();
+  if (lightBaseReadout) lightBaseReadout.textContent = baseColor();
+  if (lightLiveSwatch) lightLiveSwatch.style.backgroundColor = highlight;
+  if (lightLiveReadout) lightLiveReadout.textContent = highlight;
+
+  for (const button of lightPresetsContainer?.querySelectorAll<HTMLButtonElement>(".light-preset") ??
+    []) {
+    button.setAttribute("aria-pressed", String(button.dataset.preset === lightState.preset));
+  }
+}
+
+let draggingLight = false;
+
+function angleFromEvent(event: PointerEvent): number | null {
+  const rect = lightRing?.getBoundingClientRect();
+  if (!rect) return null;
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  return angleFromPointer(event.clientX - centerX, event.clientY - centerY);
+}
+
+lightHandle?.addEventListener("pointerdown", (event) => {
+  draggingLight = true;
+  lightHandle.setPointerCapture(event.pointerId);
+});
+
+lightHandle?.addEventListener("pointermove", (event) => {
+  if (!draggingLight) return;
+  const angle = angleFromEvent(event);
+  if (angle === null) return;
+  lightState = setAngle(lightState, angle);
+  renderLight();
+});
+
+lightHandle?.addEventListener("pointerup", () => {
+  draggingLight = false;
+});
+
+lightHandle?.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+    lightState = setAngle(lightState, lightState.angle - 5);
+    renderLight();
+    event.preventDefault();
+  } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+    lightState = setAngle(lightState, lightState.angle + 5);
+    renderLight();
+    event.preventDefault();
+  }
+});
+
+buildLightPresets();
+renderLight();
 
 const bgSections = document.querySelectorAll<HTMLElement>("[data-bg-id]");
 const bgLayers = document.querySelectorAll<HTMLElement>(".bg-layer");

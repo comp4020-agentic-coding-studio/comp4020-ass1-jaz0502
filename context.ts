@@ -31,7 +31,7 @@ export function toggleReveal(state: ContrastState): ContrastState {
 
 // More saturated and slightly darker than a "safe" pastel: induction scales
 // with how strongly the surround itself reads as coloured.
-function hueToBackground(hue: number): string {
+export function hueToBackground(hue: number): string {
   return `hsl(${hue}, 82%, 40%)`;
 }
 

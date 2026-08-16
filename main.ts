@@ -46,6 +46,16 @@ import {
   setZoom,
   type ZoomState,
 } from "./pixels";
+import {
+  complementarySwatch,
+  complementRgb,
+  initialWheelState,
+  setHue,
+  surroundBackground,
+  surroundRgb,
+  wheelPatchColor,
+  type WheelState,
+} from "./wheel";
 
 const HUE_NAMES: Record<number, string> = {
   0: "Red",
@@ -183,6 +193,77 @@ dragSlider?.addEventListener("input", () => {
   renderDrag();
 });
 renderDrag();
+
+let wheelState: WheelState = initialWheelState();
+
+const wheelDial = document.querySelector<HTMLElement>('[data-testid="wheel-dial"]');
+const wheelHandle = document.querySelector<HTMLElement>('[data-testid="wheel-handle"]');
+const wheelStage = document.querySelector<HTMLElement>('[data-testid="wheel-stage"]');
+const wheelPatch = document.querySelector<HTMLElement>('[data-testid="wheel-patch"]');
+const wheelSurroundSwatch = document.querySelector<HTMLElement>('[data-testid="wheel-surround-swatch"]');
+const wheelSurroundValue = document.querySelector<HTMLElement>('[data-testid="wheel-surround-value"]');
+const wheelComplementSwatch = document.querySelector<HTMLElement>('[data-testid="wheel-complement-swatch"]');
+const wheelComplementValue = document.querySelector<HTMLElement>('[data-testid="wheel-complement-value"]');
+
+function renderWheel() {
+  const surround = surroundBackground(wheelState);
+  wheelStage?.style.setProperty("background-color", surround);
+  if (wheelPatch) wheelPatch.style.backgroundColor = wheelPatchColor();
+
+  const rad = (wheelState.hue * Math.PI) / 180;
+  const dialRadius = (wheelDial?.getBoundingClientRect().width ?? 0) / 2;
+  if (wheelHandle) {
+    wheelHandle.style.transform = `translate(-50%, -50%) translate(${Math.cos(rad) * dialRadius}px, ${Math.sin(rad) * dialRadius}px)`;
+    wheelHandle.style.backgroundColor = surround;
+    wheelHandle.setAttribute("aria-valuenow", String(Math.round(wheelState.hue)));
+  }
+
+  if (wheelSurroundSwatch) wheelSurroundSwatch.style.backgroundColor = surround;
+  if (wheelSurroundValue) wheelSurroundValue.textContent = surroundRgb(wheelState);
+  if (wheelComplementSwatch) wheelComplementSwatch.style.backgroundColor = complementarySwatch(wheelState);
+  if (wheelComplementValue) wheelComplementValue.textContent = complementRgb(wheelState);
+}
+
+let draggingWheel = false;
+
+function angleFromWheelEvent(event: PointerEvent): number | null {
+  const rect = wheelDial?.getBoundingClientRect();
+  if (!rect) return null;
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  return angleFromPointer(event.clientX - centerX, event.clientY - centerY);
+}
+
+wheelHandle?.addEventListener("pointerdown", (event) => {
+  draggingWheel = true;
+  wheelHandle.setPointerCapture(event.pointerId);
+});
+
+wheelHandle?.addEventListener("pointermove", (event) => {
+  if (!draggingWheel) return;
+  const angle = angleFromWheelEvent(event);
+  if (angle === null) return;
+  wheelState = setHue(wheelState, angle);
+  renderWheel();
+});
+
+wheelHandle?.addEventListener("pointerup", () => {
+  draggingWheel = false;
+});
+
+wheelHandle?.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+    wheelState = setHue(wheelState, wheelState.hue - 5);
+    renderWheel();
+    event.preventDefault();
+  } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+    wheelState = setHue(wheelState, wheelState.hue + 5);
+    renderWheel();
+    event.preventDefault();
+  }
+});
+
+renderWheel();
 
 const LIGHT_PRESETS: LightPreset[] = ["neutral", "warm", "cool"];
 const LIGHT_PRESET_LABELS: Record<LightPreset, string> = {

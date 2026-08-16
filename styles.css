@@ -442,6 +442,119 @@ header nav a {
   border: none;
 }
 
+.wheel-round {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #ddd;
+}
+
+.wheel-dial {
+  position: relative;
+  width: 15rem;
+  height: 15rem;
+  margin: 2rem auto;
+  border-radius: 50%;
+
+  /* from -90deg rotates the gradient's own 0deg (CSS default: top, clockwise)
+     to start at the 3-o'clock point, matching the cos/sin, atan2-based
+     handle placement below (0deg = right, increasing clockwise in screen
+     coordinates) -- so the handle always sits on the ring's own colour for
+     whatever hue it's showing. */
+  background: conic-gradient(
+    from -90deg,
+    hsl(0deg 82% 40%) 0deg,
+    hsl(60deg 82% 40%) 60deg,
+    hsl(120deg 82% 40%) 120deg,
+    hsl(180deg 82% 40%) 180deg,
+    hsl(240deg 82% 40%) 240deg,
+    hsl(300deg 82% 40%) 300deg,
+    hsl(0deg 82% 40%) 360deg
+  );
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 10%);
+}
+
+.wheel-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.4s ease;
+}
+
+.wheel-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 25%),
+    0 1px 3px rgb(0 0 0 / 35%);
+  cursor: grab;
+  touch-action: none;
+}
+
+.wheel-handle:active {
+  cursor: grabbing;
+}
+
+.wheel-handle:focus-visible {
+  outline: 3px solid #0b5fff;
+  outline-offset: 2px;
+}
+
+@media (width <= 40rem) {
+  .wheel-dial {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  .wheel-stage {
+    width: 7rem;
+    height: 7rem;
+  }
+}
+
+.wheel-readouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  justify-content: center;
+}
+
+.wheel-readout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wheel-readout p {
+  margin: 0;
+  font-size: 0.8rem;
+  text-align: left;
+}
+
+.wheel-readout strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.wheel-readout-swatch {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 15%);
+}
+
 .drag-slider::-moz-range-thumb {
   width: 4.5rem;
   height: 4.5rem;

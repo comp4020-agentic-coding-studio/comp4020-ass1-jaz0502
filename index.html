@@ -133,6 +133,40 @@
           </div>
           <p class="drag-result" data-testid="drag-result" aria-live="polite"></p>
         </div>
+
+        <div class="wheel-round" data-testid="wheel-round">
+          <h3>Now go all the way around</h3>
+          <p class="prose">
+            It isn't just red and green. Rotate the surround through the whole colour wheel — the
+            same fixed grey patch keeps drifting toward whatever colour sits opposite the
+            surround, the same trick behind the shadow you'll see change colour in Light.
+          </p>
+          <div class="wheel-dial" data-testid="wheel-dial">
+            <div
+              class="wheel-handle"
+              data-testid="wheel-handle"
+              role="slider"
+              tabindex="0"
+              aria-label="Rotate the surround colour around the wheel"
+              aria-valuemin="0"
+              aria-valuemax="360"
+              aria-valuenow="0"
+            ></div>
+            <div class="wheel-stage" data-testid="wheel-stage">
+              <div class="patch" data-testid="wheel-patch"></div>
+            </div>
+          </div>
+          <div class="wheel-readouts" data-testid="wheel-readouts">
+            <div class="wheel-readout">
+              <span class="wheel-readout-swatch" data-testid="wheel-surround-swatch"></span>
+              <p>Surround<br /><strong data-testid="wheel-surround-value"></strong></p>
+            </div>
+            <div class="wheel-readout">
+              <span class="wheel-readout-swatch" data-testid="wheel-complement-swatch"></span>
+              <p>Predicted complement<br /><strong data-testid="wheel-complement-value"></strong></p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="beat" id="light" data-bg-id="light" aria-labelledby="light-heading">

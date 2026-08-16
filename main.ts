@@ -37,6 +37,15 @@ import {
   type LightPreset,
   type LightState,
 } from "./light";
+import {
+  SUBPIXEL_BLUE,
+  SUBPIXEL_RED,
+  cellSizeRem,
+  initialZoomState,
+  isRevealed,
+  setZoom,
+  type ZoomState,
+} from "./pixels";
 
 const HUE_NAMES: Record<number, string> = {
   0: "Red",
@@ -284,6 +293,42 @@ lightHandle?.addEventListener("keydown", (event) => {
 
 buildLightPresets();
 renderLight();
+
+let zoomState: ZoomState = initialZoomState();
+
+const pixelsStage = document.querySelector<HTMLElement>('[data-testid="pixels-stage"]');
+const pixelsSquare = document.querySelector<HTMLElement>('[data-testid="pixels-square"]');
+const pixelsZoomSlider = document.querySelector<HTMLInputElement>('[data-testid="pixels-zoom"]');
+const pixelsCallout = document.querySelector<HTMLElement>('[data-testid="pixels-callout"]');
+const pixelsReadouts = document.querySelector<HTMLElement>('[data-testid="pixels-readouts"]');
+const pixelsRedSwatch = document.querySelector<HTMLElement>('[data-testid="pixels-readout-red-swatch"]');
+const pixelsRedValue = document.querySelector<HTMLElement>('[data-testid="pixels-readout-red-value"]');
+const pixelsBlueSwatch = document.querySelector<HTMLElement>('[data-testid="pixels-readout-blue-swatch"]');
+const pixelsBlueValue = document.querySelector<HTMLElement>('[data-testid="pixels-readout-blue-value"]');
+
+function renderPixels() {
+  pixelsSquare?.style.setProperty("--cell-size", `${cellSizeRem(zoomState.zoom)}rem`);
+
+  const revealed = isRevealed(zoomState.zoom);
+  pixelsStage?.classList.toggle("pixels-revealed", revealed);
+  pixelsCallout?.setAttribute("aria-hidden", String(!revealed));
+  pixelsReadouts?.setAttribute("aria-hidden", String(!revealed));
+}
+
+pixelsSquare?.style.setProperty("--subpixel-red", SUBPIXEL_RED);
+pixelsSquare?.style.setProperty("--subpixel-blue", SUBPIXEL_BLUE);
+
+if (pixelsRedSwatch) pixelsRedSwatch.style.backgroundColor = SUBPIXEL_RED;
+if (pixelsRedValue) pixelsRedValue.textContent = SUBPIXEL_RED;
+if (pixelsBlueSwatch) pixelsBlueSwatch.style.backgroundColor = SUBPIXEL_BLUE;
+if (pixelsBlueValue) pixelsBlueValue.textContent = SUBPIXEL_BLUE;
+
+pixelsZoomSlider?.addEventListener("input", () => {
+  zoomState = setZoom(zoomState, Number(pixelsZoomSlider.value));
+  renderPixels();
+});
+
+renderPixels();
 
 const bgSections = document.querySelectorAll<HTMLElement>("[data-bg-id]");
 const bgLayers = document.querySelectorAll<HTMLElement>(".bg-layer");

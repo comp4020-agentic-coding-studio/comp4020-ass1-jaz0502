@@ -11,6 +11,7 @@
       <div class="bg-layer" data-bg="hero"></div>
       <div class="bg-layer" data-bg="context"></div>
       <div class="bg-layer" data-bg="light"></div>
+      <div class="bg-layer" data-bg="pixels"></div>
     </div>
     <header>
       <nav aria-label="Primary">
@@ -181,6 +182,49 @@
                 <span class="swatch-live" data-testid="light-live-swatch" aria-hidden="true"></span>
                 <p>What you're seeing<br /><strong data-testid="light-live-readout"></strong></p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="beat" id="pixels" data-bg-id="pixels" aria-labelledby="pixels-heading">
+        <h2 id="pixels-heading"><span class="beat-number">3</span> Pixels</h2>
+        <p class="prose">
+          Every colour on this page, including this one, was made of neighbours the whole
+          time — down to the pixels of the screen itself.
+        </p>
+
+        <div class="pixels-stage" data-testid="pixels-stage">
+          <p class="pixels-prompt">What colour do you see?</p>
+          <div class="pixels-square" data-testid="pixels-square" aria-hidden="true"></div>
+
+          <div class="pixels-zoom-row">
+            <span class="pixels-zoom-label">Zoom out</span>
+            <input
+              type="range"
+              class="pixels-zoom"
+              data-testid="pixels-zoom"
+              min="0"
+              max="100"
+              value="0"
+              aria-label="Zoom into the purple square"
+            />
+            <span class="pixels-zoom-label">Zoom in</span>
+          </div>
+
+          <p class="pixels-callout" data-testid="pixels-callout">
+            Wait — where did the purple go? There isn't a purple light in there. Your screen
+            creates the perception of purple by combining dark red and dark blue light.
+          </p>
+
+          <div class="pixels-readouts" data-testid="pixels-readouts">
+            <div class="pixels-readout">
+              <span class="pixels-readout-swatch" data-testid="pixels-readout-red-swatch"></span>
+              <p>Red subpixel<br /><strong data-testid="pixels-readout-red-value"></strong></p>
+            </div>
+            <div class="pixels-readout">
+              <span class="pixels-readout-swatch" data-testid="pixels-readout-blue-swatch"></span>
+              <p>Blue subpixel<br /><strong data-testid="pixels-readout-blue-value"></strong></p>
             </div>
           </div>
         </div>

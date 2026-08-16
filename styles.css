@@ -74,6 +74,10 @@ header nav a {
   background: linear-gradient(160deg, #f5e6c8 0%, var(--canvas) 50%, #d9e6f2 100%);
 }
 
+.bg-layer[data-bg="pixels"] {
+  background: linear-gradient(160deg, var(--ink) 0%, #2a2620 60%, var(--canvas) 100%);
+}
+
 .hero {
   position: relative;
   display: flex;
@@ -609,4 +613,108 @@ header nav a {
 .drag-result {
   min-height: 1.5em;
   font-weight: 600;
+}
+
+.pixels-stage {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.pixels-prompt {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.pixels-square {
+  width: 10rem;
+  height: 10rem;
+  margin: 0 auto;
+  background-image: repeating-conic-gradient(
+    var(--subpixel-red, darkred) 0% 25%,
+    var(--subpixel-blue, darkblue) 0% 50%
+  );
+  background-size: var(--cell-size, 0.4rem) var(--cell-size, 0.4rem);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 10%);
+  overflow: hidden;
+  transition: background-size 0.15s ease;
+}
+
+.pixels-zoom-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 20rem;
+  margin: 1rem auto 0;
+}
+
+.pixels-zoom-label {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pixels-zoom {
+  flex: 1;
+}
+
+.pixels-callout {
+  max-width: 24rem;
+  margin: 1rem auto 0;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.pixels-revealed .pixels-callout {
+  opacity: 1;
+}
+
+.pixels-readouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  justify-content: center;
+  margin: 0.75rem auto 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.pixels-revealed .pixels-readouts {
+  opacity: 1;
+}
+
+.pixels-readout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pixels-readout p {
+  margin: 0;
+  font-size: 0.8rem;
+  text-align: left;
+}
+
+.pixels-readout strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.pixels-readout-swatch {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 15%);
+}
+
+@media (width <= 40rem) {
+  .pixels-square {
+    width: 8rem;
+    height: 8rem;
+  }
 }

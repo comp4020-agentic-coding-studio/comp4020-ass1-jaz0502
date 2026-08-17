@@ -37,6 +37,58 @@ const PURPLE_CHANNELS = hexToChannels(PURPLE_COLOR);
 export const SUBPIXEL_RED = subpixelColor(PURPLE_CHANNELS, "r");
 export const SUBPIXEL_BLUE = subpixelColor(PURPLE_CHANNELS, "b");
 
+export interface ColorGuessState {
+  guess: string | null;
+}
+
+export function initialColorGuessState(): ColorGuessState {
+  return { guess: null };
+}
+
+export function chooseColorGuess(guess: string): ColorGuessState {
+  return { guess };
+}
+
+export function isColorGuessCorrect(state: ColorGuessState): boolean {
+  return state.guess === PURPLE_COLOR;
+}
+
+// Includes the square's own two ingredient subpixel colours as distractors --
+// guessing "red" or "blue" is wrong about what's perceived (it reads as
+// purple), and guessing purple is right about perception but wrong about
+// what's actually there once you zoom in.
+export const COLOR_GUESS_SWATCHES = [
+  PURPLE_COLOR,
+  "#8b0000",
+  "#00008b",
+  "#808080",
+  "#ff00ff",
+] as const;
+
+export type ChannelKey = "r" | "g" | "b";
+
+export const CHANNEL_LABEL: Record<ChannelKey, string> = { r: "Red", g: "Green", b: "Blue" };
+
+// Which channels are actually lit -- every preset below uses exactly two,
+// the same shape as the purple demo's dark-red + dark-blue split.
+export function activeChannels(channels: Channels): ChannelKey[] {
+  return (["r", "g", "b"] as const).filter((c) => channels[c] > 0);
+}
+
+export interface PixelPreset {
+  key: string;
+  label: string;
+  color: string;
+}
+
+// A pre-selected range, not a free colour picker -- purple isn't special,
+// generalizing it just swaps which two channels are doing the fusing.
+export const PIXEL_PRESETS: PixelPreset[] = [
+  { key: "purple", label: "Purple", color: PURPLE_COLOR }, // red + blue
+  { key: "yellow", label: "Yellow", color: "#8b8b00" }, // red + green
+  { key: "cyan", label: "Cyan", color: "#008b8b" }, // green + blue
+];
+
 export interface ZoomState {
   zoom: number; // 0-100: 0 is zoomed out (flat), 100 is zoomed in (subpixels)
 }

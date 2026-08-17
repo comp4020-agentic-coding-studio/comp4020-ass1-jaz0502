@@ -48,12 +48,23 @@ import {
   type Glow,
 } from "./find-apple";
 import {
+  CHANNEL_LABEL,
+  COLOR_GUESS_SWATCHES,
+  PIXEL_PRESETS,
   SUBPIXEL_BLUE,
   SUBPIXEL_RED,
+  activeChannels,
   cellSizeRem,
+  chooseColorGuess,
+  hexToChannels,
+  initialColorGuessState,
   initialZoomState,
+  isColorGuessCorrect,
   isRevealed,
   setZoom,
+  subpixelColor,
+  type ColorGuessState,
+  type PixelPreset,
   type ZoomState,
 } from "./pixels";
 import {
@@ -510,6 +521,117 @@ pixelsZoomSlider?.addEventListener("input", () => {
 });
 
 renderPixels();
+
+let colorGuessState: ColorGuessState = initialColorGuessState();
+
+const pixelsGuessSwatchesContainer = document.querySelector<HTMLElement>(
+  '[data-testid="pixels-guess-swatches"]',
+);
+const pixelsGuessResult = document.querySelector<HTMLElement>('[data-testid="pixels-guess-result"]');
+
+function buildPixelsGuessSwatches() {
+  if (!pixelsGuessSwatchesContainer) return;
+  for (const color of COLOR_GUESS_SWATCHES) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "swatch";
+    button.style.backgroundColor = color;
+    button.setAttribute("aria-label", `Guess ${color}`);
+    button.dataset.color = color;
+    button.addEventListener("click", () => {
+      colorGuessState = chooseColorGuess(color);
+      renderPixelsGuess();
+    });
+    pixelsGuessSwatchesContainer.append(button);
+  }
+}
+
+function renderPixelsGuess() {
+  for (const button of pixelsGuessSwatchesContainer?.querySelectorAll<HTMLButtonElement>(".swatch") ?? []) {
+    button.setAttribute("aria-pressed", String(button.dataset.color === colorGuessState.guess));
+  }
+
+  if (!pixelsGuessResult) return;
+  if (!colorGuessState.guess) {
+    pixelsGuessResult.textContent = "";
+  } else if (isColorGuessCorrect(colorGuessState)) {
+    pixelsGuessResult.textContent = "Yes — that's what you perceive. Keep zooming to see what's actually there.";
+  } else {
+    pixelsGuessResult.textContent = `Not quite — what you're perceiving is purple, not ${colorGuessState.guess}.`;
+  }
+}
+
+buildPixelsGuessSwatches();
+renderPixelsGuess();
+
+let presetZoomState: ZoomState = initialZoomState();
+let selectedPreset: PixelPreset = PIXEL_PRESETS[0];
+
+const presetPixelsStage = document.querySelector<HTMLElement>('[data-testid="preset-pixels-stage"]');
+const presetPixelsSquare = document.querySelector<HTMLElement>('[data-testid="preset-pixels-square"]');
+const presetPixelsPresetsContainer = document.querySelector<HTMLElement>(
+  '[data-testid="preset-pixels-presets"]',
+);
+const presetPixelsZoomSlider = document.querySelector<HTMLInputElement>('[data-testid="preset-pixels-zoom"]');
+const presetPixelsCallout = document.querySelector<HTMLElement>('[data-testid="preset-pixels-callout"]');
+const presetPixelsReadouts = document.querySelector<HTMLElement>('[data-testid="preset-pixels-readouts"]');
+const presetPixelsSwatchA = document.querySelector<HTMLElement>('[data-testid="preset-pixels-readout-a-swatch"]');
+const presetPixelsLabelA = document.querySelector<HTMLElement>('[data-testid="preset-pixels-readout-a-label"]');
+const presetPixelsValueA = document.querySelector<HTMLElement>('[data-testid="preset-pixels-readout-a-value"]');
+const presetPixelsSwatchB = document.querySelector<HTMLElement>('[data-testid="preset-pixels-readout-b-swatch"]');
+const presetPixelsLabelB = document.querySelector<HTMLElement>('[data-testid="preset-pixels-readout-b-label"]');
+const presetPixelsValueB = document.querySelector<HTMLElement>('[data-testid="preset-pixels-readout-b-value"]');
+
+function buildPixelPresets() {
+  if (!presetPixelsPresetsContainer) return;
+  for (const preset of PIXEL_PRESETS) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "light-preset";
+    button.dataset.presetKey = preset.key;
+    button.textContent = preset.label;
+    button.addEventListener("click", () => {
+      selectedPreset = preset;
+      renderPixelPreset();
+    });
+    presetPixelsPresetsContainer.append(button);
+  }
+}
+
+function renderPixelPreset() {
+  const channels = hexToChannels(selectedPreset.color);
+  const [a, b] = activeChannels(channels);
+  const colorA = subpixelColor(channels, a);
+  const colorB = subpixelColor(channels, b);
+
+  presetPixelsSquare?.style.setProperty("--subpixel-red", colorA);
+  presetPixelsSquare?.style.setProperty("--subpixel-blue", colorB);
+  presetPixelsSquare?.style.setProperty("--cell-size", `${cellSizeRem(presetZoomState.zoom)}rem`);
+
+  if (presetPixelsSwatchA) presetPixelsSwatchA.style.backgroundColor = colorA;
+  if (presetPixelsLabelA) presetPixelsLabelA.textContent = CHANNEL_LABEL[a];
+  if (presetPixelsValueA) presetPixelsValueA.textContent = colorA;
+  if (presetPixelsSwatchB) presetPixelsSwatchB.style.backgroundColor = colorB;
+  if (presetPixelsLabelB) presetPixelsLabelB.textContent = CHANNEL_LABEL[b];
+  if (presetPixelsValueB) presetPixelsValueB.textContent = colorB;
+
+  const revealed = isRevealed(presetZoomState.zoom);
+  presetPixelsStage?.classList.toggle("pixels-revealed", revealed);
+  presetPixelsCallout?.setAttribute("aria-hidden", String(!revealed));
+  presetPixelsReadouts?.setAttribute("aria-hidden", String(!revealed));
+
+  for (const button of presetPixelsPresetsContainer?.querySelectorAll<HTMLButtonElement>(".light-preset") ?? []) {
+    button.setAttribute("aria-pressed", String(button.dataset.presetKey === selectedPreset.key));
+  }
+}
+
+presetPixelsZoomSlider?.addEventListener("input", () => {
+  presetZoomState = setZoom(presetZoomState, Number(presetPixelsZoomSlider.value));
+  renderPixelPreset();
+});
+
+buildPixelPresets();
+renderPixelPreset();
 
 const bgSections = document.querySelectorAll<HTMLElement>("[data-bg-id]");
 const bgLayers = document.querySelectorAll<HTMLElement>(".bg-layer");

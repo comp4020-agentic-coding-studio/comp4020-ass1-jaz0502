@@ -1,5 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { PURPLE_COLOR, cellSizeRem, clampZoom, hexToChannels, isRevealed, subpixelColor } from "../pixels";
+import {
+  PIXEL_PRESETS,
+  PURPLE_COLOR,
+  COLOR_GUESS_SWATCHES,
+  activeChannels,
+  cellSizeRem,
+  chooseColorGuess,
+  clampZoom,
+  hexToChannels,
+  initialColorGuessState,
+  isColorGuessCorrect,
+  isRevealed,
+  subpixelColor,
+} from "../pixels";
 
 // The core claim the PIXELS beat makes: a colour that reads as a single hue
 // is really dark red and dark blue subpixels the eye fuses together --
@@ -63,5 +76,59 @@ describe("PIXELS: the reveal callout only appears once the zoom is essentially c
 
   it("is revealed at zoom 100", () => {
     expect(isRevealed(100)).toBe(true);
+  });
+});
+
+// The "what colour do you see?" prompt made active: a small fixed swatch set
+// (not a free picker) that deliberately includes the square's own ingredient
+// subpixel colours as distractors, so guessing "red" or "blue" is wrong
+// about perception even though those are literally what's back there.
+describe("PIXELS: the colour guess has exactly one right answer", () => {
+  it("includes the purple square's true colour among a small, fixed set of candidates", () => {
+    const matches = COLOR_GUESS_SWATCHES.filter((color) => color === PURPLE_COLOR);
+    expect(matches.length).toBe(1);
+    expect(COLOR_GUESS_SWATCHES.length).toBeGreaterThanOrEqual(4);
+    expect(COLOR_GUESS_SWATCHES.length).toBeLessThanOrEqual(6);
+  });
+
+  it("starts with no guess made", () => {
+    expect(initialColorGuessState().guess).toBeNull();
+  });
+
+  it("records a guess", () => {
+    const state = chooseColorGuess(COLOR_GUESS_SWATCHES[1]);
+    expect(state.guess).toBe(COLOR_GUESS_SWATCHES[1]);
+  });
+
+  it("is correct only when the guess matches the square's true colour", () => {
+    expect(isColorGuessCorrect(chooseColorGuess("#8b0000"))).toBe(false);
+    expect(isColorGuessCorrect(chooseColorGuess(PURPLE_COLOR))).toBe(true);
+    expect(isColorGuessCorrect(initialColorGuessState())).toBe(false);
+  });
+});
+
+// The "choose the pixels yourself" round: generalizing the single hardcoded
+// purple demo to a small pre-selected range, the same move wheel.ts made for
+// CONTEXT and find-apple.ts made for LIGHT. Every preset must still resolve
+// to exactly two lit channels -- the same fusion trick, different colours.
+describe("PIXELS: choosing your own pixel colours generalizes the single purple demo", () => {
+  it("splits a known hex into exactly its nonzero channels", () => {
+    expect(activeChannels(hexToChannels(PURPLE_COLOR))).toEqual(["r", "b"]);
+    expect(activeChannels({ r: 0, g: 128, b: 0 })).toEqual(["g"]);
+  });
+
+  it("gives every preset exactly two active channels", () => {
+    for (const preset of PIXEL_PRESETS) {
+      expect(activeChannels(hexToChannels(preset.color)).length).toBe(2);
+    }
+  });
+
+  it("keeps every preset colour distinct", () => {
+    const colors = new Set(PIXEL_PRESETS.map((preset) => preset.color));
+    expect(colors.size).toBe(PIXEL_PRESETS.length);
+  });
+
+  it("includes the original purple demo as one of the presets", () => {
+    expect(PIXEL_PRESETS.some((preset) => preset.color === PURPLE_COLOR)).toBe(true);
   });
 });

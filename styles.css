@@ -749,6 +749,16 @@ header nav a {
   text-align: center;
 }
 
+.pixels-guess-swatches {
+  margin: 0.75rem 0;
+}
+
+.pixel-preset-round {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #ddd;
+}
+
 .pixels-prompt {
   margin: 0 0 0.75rem;
   font-size: 1.1rem;

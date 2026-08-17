@@ -265,7 +265,17 @@
 
         <div class="pixels-stage" data-testid="pixels-stage">
           <p class="pixels-prompt">What colour do you see?</p>
+
+          <div
+            class="swatches pixels-guess-swatches"
+            role="group"
+            aria-label="Guess the colour you see"
+            data-testid="pixels-guess-swatches"
+          ></div>
+
           <div class="pixels-square" data-testid="pixels-square" aria-hidden="true"></div>
+
+          <p class="quiz-result" data-testid="pixels-guess-result" aria-live="polite"></p>
 
           <div class="pixels-zoom-row">
             <span class="pixels-zoom-label">Zoom out</span>
@@ -297,6 +307,67 @@
             </div>
           </div>
         </div>
+
+        <div class="pixel-preset-round" data-testid="pixel-preset-round">
+          <h3>Now pick the pixels yourself</h3>
+          <p class="prose">
+            Purple isn't special — pick a different pair of subpixel colours and the same trick
+            happens with a different fused colour.
+          </p>
+
+          <div class="pixels-stage" data-testid="preset-pixels-stage">
+            <div
+              class="light-presets"
+              role="group"
+              aria-label="Choose a fused colour"
+              data-testid="preset-pixels-presets"
+            ></div>
+
+            <div class="pixels-square" data-testid="preset-pixels-square" aria-hidden="true"></div>
+
+            <div class="pixels-zoom-row">
+              <span class="pixels-zoom-label">Zoom out</span>
+              <input
+                type="range"
+                class="pixels-zoom"
+                data-testid="preset-pixels-zoom"
+                min="0"
+                max="100"
+                value="0"
+                aria-label="Zoom into the square"
+              />
+              <span class="pixels-zoom-label">Zoom in</span>
+            </div>
+
+            <p class="pixels-callout" data-testid="preset-pixels-callout">
+              Wait — where did that colour go? Your screen makes it by combining these two
+              subpixels — no single light of that colour is in there.
+            </p>
+
+            <div class="pixels-readouts" data-testid="preset-pixels-readouts">
+              <div class="pixels-readout">
+                <span class="pixels-readout-swatch" data-testid="preset-pixels-readout-a-swatch"></span>
+                <p>
+                  <span data-testid="preset-pixels-readout-a-label"></span> subpixel<br />
+                  <strong data-testid="preset-pixels-readout-a-value"></strong>
+                </p>
+              </div>
+              <div class="pixels-readout">
+                <span class="pixels-readout-swatch" data-testid="preset-pixels-readout-b-swatch"></span>
+                <p>
+                  <span data-testid="preset-pixels-readout-b-label"></span> subpixel<br />
+                  <strong data-testid="preset-pixels-readout-b-value"></strong>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="prose pixels-conclusion" data-testid="pixels-conclusion">
+          You can't always tell what's producing a colour just by looking at it. A grey patch
+          borrowing colour from its surroundings, an apple lit by a tinted glow, a flat square
+          hiding two subpixels — colour isn't simply what's there. It's what you perceive.
+        </p>
       </section>
       </div>
     </main>

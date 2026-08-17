@@ -219,6 +219,41 @@
             </div>
           </div>
         </div>
+
+        <div class="find-round" data-testid="find-round">
+          <h3>Can you find the true apple?</h3>
+          <p class="prose">
+            This apple is sitting under an exaggerated light. What colour is it really? Pick
+            the swatch you think is its true, unlit colour.
+          </p>
+
+          <div class="light-stage find-stage" data-testid="find-stage">
+            <div class="light-scene find-scene" data-testid="find-scene">
+              <div class="apple-shadow" data-testid="find-apple-shadow" aria-hidden="true"></div>
+              <div class="apple" data-testid="find-apple" aria-hidden="true">
+                <div class="apple-stem" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <div class="light-controls">
+              <div
+                class="light-presets"
+                role="group"
+                aria-label="Light on the apple"
+                data-testid="find-glow"
+              ></div>
+
+              <div
+                class="swatches find-swatches"
+                role="group"
+                aria-label="Guess the apple's true colour"
+                data-testid="find-swatches"
+              ></div>
+
+              <p class="quiz-result" data-testid="find-result" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="beat" id="pixels" data-bg-id="pixels" aria-labelledby="pixels-heading">

@@ -4,7 +4,7 @@
 // material colour -- its albedo -- never does. baseColor() is that fixed
 // value; everything else in this module derives from the light instead.
 
-export type LightPreset = "neutral" | "warm" | "cool";
+export type LightPreset = "sunlight" | "candlelight" | "led";
 
 export const TRUE_COLOR = "#d1352b"; // matches --red in styles.css
 
@@ -14,7 +14,7 @@ export interface LightState {
 }
 
 export function initialLightState(): LightState {
-  return { angle: 300, preset: "neutral" };
+  return { angle: 300, preset: "sunlight" };
 }
 
 function normalizeAngle(angle: number): number {
@@ -50,28 +50,28 @@ function mixRgb(a: Rgb, b: Rgb, t: number): Rgb {
 }
 
 // The colour the light itself contributes to the highlight, and how strongly
-// -- neutral (white) light barely tints the surface; warm/cool light tints
-// it hard, which is what makes the "same object" claim worth making at all.
+// -- sunlight (near-white) barely tints the surface; candlelight/LED tint it
+// hard, which is what makes the "same object" claim worth making at all.
 const PRESET_TINT: Record<LightPreset, Rgb & { amount: number }> = {
-  neutral: { r: 255, g: 255, b: 255, amount: 0.15 },
-  warm: { r: 255, g: 176, b: 80, amount: 0.45 },
-  cool: { r: 120, g: 170, b: 255, amount: 0.45 },
+  sunlight: { r: 255, g: 255, b: 255, amount: 0.15 },
+  candlelight: { r: 255, g: 176, b: 80, amount: 0.45 },
+  led: { r: 120, g: 170, b: 255, amount: 0.45 },
 };
 
 // Ambient/bounce light in a shadow skews toward the *complementary* hue of
 // the light colour -- the same complementary-colour idea CONTEXT introduced,
 // now showing up in a shadow instead of a flat background.
 const SHADOW_TINT: Record<LightPreset, Rgb> = {
-  neutral: { r: 60, g: 60, b: 70 },
-  warm: { r: 90, g: 130, b: 200 },
-  cool: { r: 200, g: 140, b: 80 },
+  sunlight: { r: 60, g: 60, b: 70 },
+  candlelight: { r: 90, g: 130, b: 200 },
+  led: { r: 200, g: 140, b: 80 },
 };
 
 const SHADOW_DARK: Rgb = { r: 25, g: 18, b: 20 };
 
 // The light is most "front-on" (strongest highlight) at this angle; it fades
 // as the light swings around behind the object.
-const FRONT_ANGLE = 270;
+export const FRONT_ANGLE = 270;
 
 function facingFactor(angle: number): number {
   const rad = ((angle - FRONT_ANGLE) * Math.PI) / 180;

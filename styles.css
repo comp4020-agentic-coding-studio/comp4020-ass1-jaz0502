@@ -728,6 +728,22 @@ header nav a {
   font-weight: 600;
 }
 
+.find-round {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #ddd;
+}
+
+.find-scene {
+  width: 12rem; /* smaller than the drag round's 16rem -- this is the secondary demo */
+  height: 12rem;
+  margin: 0 auto;
+}
+
+.find-swatches {
+  margin: 1rem 0;
+}
+
 .pixels-stage {
   margin: 1rem 0;
   text-align: center;

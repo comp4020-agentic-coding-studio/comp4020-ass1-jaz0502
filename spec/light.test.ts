@@ -12,7 +12,7 @@ import {
   type LightPreset,
 } from "../light";
 
-const PRESETS: LightPreset[] = ["neutral", "warm", "cool"];
+const PRESETS: LightPreset[] = ["sunlight", "candlelight", "led"];
 const ANGLES = [0, 45, 90, 135, 180, 225, 270, 315];
 
 // The core claim the LIGHT beat makes: the object's own colour never moves,
@@ -33,10 +33,10 @@ describe("LIGHT: the material colour never changes, only the light does", () => 
 
   it("changes the highlight colour when the light preset changes", () => {
     const state = initialLightState();
-    const neutral = highlightColor(setPreset(state, "neutral"));
-    const warm = highlightColor(setPreset(state, "warm"));
-    const cool = highlightColor(setPreset(state, "cool"));
-    expect(new Set([neutral, warm, cool]).size).toBe(3);
+    const sunlight = highlightColor(setPreset(state, "sunlight"));
+    const candlelight = highlightColor(setPreset(state, "candlelight"));
+    const led = highlightColor(setPreset(state, "led"));
+    expect(new Set([sunlight, candlelight, led]).size).toBe(3);
   });
 
   it("moves the highlight to the opposite side as the light swings 180 degrees", () => {
@@ -58,9 +58,9 @@ describe("LIGHT: the material colour never changes, only the light does", () => 
       const state = setPreset(initialLightState(), preset);
       expect(shadowColor(state)).not.toBe(highlightColor(state));
     }
-    const warmShadow = shadowColor(setPreset(initialLightState(), "warm"));
-    const coolShadow = shadowColor(setPreset(initialLightState(), "cool"));
-    expect(warmShadow).not.toBe(coolShadow);
+    const candlelightShadow = shadowColor(setPreset(initialLightState(), "candlelight"));
+    const ledShadow = shadowColor(setPreset(initialLightState(), "led"));
+    expect(candlelightShadow).not.toBe(ledShadow);
   });
 
   it("normalizes angles outside 0-360 the same way the drag handle would produce them", () => {

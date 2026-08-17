@@ -27,6 +27,7 @@ import { pickActiveSection, type SectionVisibility } from "./background";
 import {
   angleFromPointer,
   baseColor,
+  FRONT_ANGLE,
   highlightColor,
   highlightOffset,
   initialLightState,
@@ -37,6 +38,15 @@ import {
   type LightPreset,
   type LightState,
 } from "./light";
+import {
+  chooseAppleGuess,
+  GUESS_SWATCHES,
+  initialFindAppleState,
+  isCorrectGuess,
+  setGlow,
+  type FindAppleState,
+  type Glow,
+} from "./find-apple";
 import {
   SUBPIXEL_BLUE,
   SUBPIXEL_RED,
@@ -265,11 +275,11 @@ wheelHandle?.addEventListener("keydown", (event) => {
 
 renderWheel();
 
-const LIGHT_PRESETS: LightPreset[] = ["neutral", "warm", "cool"];
+const LIGHT_PRESETS: LightPreset[] = ["sunlight", "candlelight", "led"];
 const LIGHT_PRESET_LABELS: Record<LightPreset, string> = {
-  neutral: "Neutral",
-  warm: "Warm",
-  cool: "Cool",
+  sunlight: "Sunlight",
+  candlelight: "Candlelight",
+  led: "LED",
 };
 
 let lightState: LightState = initialLightState();
@@ -374,6 +384,96 @@ lightHandle?.addEventListener("keydown", (event) => {
 
 buildLightPresets();
 renderLight();
+
+const GLOW_PRESETS: Glow[] = ["candlelight", "led"];
+const GLOW_LABELS: Record<Glow, string> = { candlelight: "Candlelight", led: "LED" };
+// "LED" doesn't lowercase into a sentence the way "candlelight" does.
+const GLOW_SENTENCE_CASE: Record<Glow, string> = { candlelight: "candlelight", led: "LED" };
+
+let findState: FindAppleState = initialFindAppleState();
+
+const findGlowContainer = document.querySelector<HTMLElement>('[data-testid="find-glow"]');
+const findAppleEl = document.querySelector<HTMLElement>('[data-testid="find-apple"]');
+const findAppleShadowEl = document.querySelector<HTMLElement>('[data-testid="find-apple-shadow"]');
+const findSwatchesContainer = document.querySelector<HTMLElement>('[data-testid="find-swatches"]');
+const findResult = document.querySelector<HTMLElement>('[data-testid="find-result"]');
+
+// Fixed at FRONT_ANGLE (light.ts's strongest, most front-on position) so the
+// tint reads as clearly as the preset allows -- this round has no drag
+// control of its own, only the glow choice.
+function findLightState(glow: Glow): LightState {
+  return setAngle(setPreset(initialLightState(), glow), FRONT_ANGLE);
+}
+
+function buildGlowPresets() {
+  if (!findGlowContainer) return;
+  for (const glow of GLOW_PRESETS) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "light-preset";
+    button.dataset.glow = glow;
+    button.textContent = GLOW_LABELS[glow];
+    button.addEventListener("click", () => {
+      findState = setGlow(findState, glow);
+      renderFindApple();
+    });
+    findGlowContainer.append(button);
+  }
+}
+
+function buildGuessSwatches() {
+  if (!findSwatchesContainer) return;
+  for (const color of GUESS_SWATCHES) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "swatch";
+    button.style.backgroundColor = color;
+    button.setAttribute("aria-label", `Guess ${color}`);
+    button.dataset.color = color;
+    button.addEventListener("click", () => {
+      findState = chooseAppleGuess(findState, color);
+      renderFindApple();
+    });
+    findSwatchesContainer.append(button);
+  }
+}
+
+function renderFindApple() {
+  const state = findLightState(findState.glow);
+  const highlight = highlightColor(state);
+  const shadow = shadowColor(state);
+  const hOffset = highlightOffset(state);
+  const sOffset = shadowOffset(state);
+
+  findAppleEl?.style.setProperty("--highlight-color", highlight);
+  findAppleEl?.style.setProperty("--highlight-x", `${hOffset.x}%`);
+  findAppleEl?.style.setProperty("--highlight-y", `${hOffset.y}%`);
+  findAppleShadowEl?.style.setProperty("--shadow-color", shadow);
+  if (findAppleShadowEl) {
+    findAppleShadowEl.style.transform = `translateX(-50%) translateX(${sOffset.x}%) scaleX(${sOffset.scale})`;
+  }
+
+  for (const button of findGlowContainer?.querySelectorAll<HTMLButtonElement>(".light-preset") ?? []) {
+    button.setAttribute("aria-pressed", String(button.dataset.glow === findState.glow));
+  }
+  for (const button of findSwatchesContainer?.querySelectorAll<HTMLButtonElement>(".swatch") ?? []) {
+    button.setAttribute("aria-pressed", String(button.dataset.color === findState.guess));
+  }
+
+  if (!findResult) {
+    // no-op
+  } else if (!findState.guess) {
+    findResult.textContent = "";
+  } else if (isCorrectGuess(findState)) {
+    findResult.textContent = `Right — the apple is always ${baseColor()}. There isn't one colour reaching your eyes: it's light reflected off the apple, changed by the ${GLOW_SENTENCE_CASE[findState.glow]}, and interpreted by your visual system.`;
+  } else {
+    findResult.textContent = `The apple is always ${baseColor()}, not ${findState.guess}. Your eyes were looking at the light, not the apple — the ${GLOW_SENTENCE_CASE[findState.glow]} changed, never the apple.`;
+  }
+}
+
+buildGlowPresets();
+buildGuessSwatches();
+renderFindApple();
 
 let zoomState: ZoomState = initialZoomState();
 

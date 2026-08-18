@@ -327,13 +327,24 @@ header nav a {
   background: var(--blue);
 }
 
+#pixels .scroll-cue {
+  color: #f2ede1;
+}
+
 .beat {
   margin: 0;
 }
 
 .beat-title {
+  position: relative;
+  overflow: hidden;
   align-items: center;
   text-align: center;
+}
+
+.beat-title > *:not(.hero-shapes) {
+  position: relative;
+  z-index: 1;
 }
 
 .beat-title h2 {

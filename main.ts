@@ -659,8 +659,8 @@ const bgObserver = new IntersectionObserver(
 
 for (const section of bgSections) bgObserver.observe(section);
 
-const introWords = document.querySelectorAll<HTMLButtonElement>(".intro-thesis-text .word");
-for (const word of introWords) {
+const clickableWords = document.querySelectorAll<HTMLButtonElement>(".word");
+for (const word of clickableWords) {
   let accent: IntroAccent = null;
   word.addEventListener("click", () => {
     accent = nextIntroAccent(accent);

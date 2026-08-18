@@ -331,6 +331,21 @@ header nav a {
   margin: 0;
 }
 
+.beat-title {
+  align-items: center;
+  text-align: center;
+}
+
+.beat-title h2 {
+  justify-content: center;
+  font-size: clamp(2.75rem, 8vw, 5.5rem);
+}
+
+.beat-title .prose {
+  max-width: 40rem;
+  font-size: 1.35rem;
+}
+
 .round {
   display: flex;
   flex-direction: column;

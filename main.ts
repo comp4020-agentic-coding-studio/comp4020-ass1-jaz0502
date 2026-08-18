@@ -41,7 +41,7 @@ import {
 } from "./light";
 import {
   chooseAppleGuess,
-  GUESS_SWATCHES,
+  guessSwatchesForGlow,
   initialFindAppleState,
   isCorrectGuess,
   setGlow,
@@ -427,15 +427,19 @@ function buildGlowPresets() {
     button.textContent = GLOW_LABELS[glow];
     button.addEventListener("click", () => {
       findState = setGlow(findState, glow);
+      buildGuessSwatches();
       renderFindApple();
     });
     findGlowContainer.append(button);
   }
 }
 
+// Rebuilt on every glow change -- the correct swatch sits at a different
+// position per glow, so the set itself changes, not just which one is right.
 function buildGuessSwatches() {
   if (!findSwatchesContainer) return;
-  for (const color of GUESS_SWATCHES) {
+  findSwatchesContainer.innerHTML = "";
+  for (const color of guessSwatchesForGlow(findState.glow)) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "swatch";

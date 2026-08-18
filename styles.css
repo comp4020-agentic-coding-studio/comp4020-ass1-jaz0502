@@ -864,6 +864,7 @@ header nav a {
 
 .find-swatches {
   margin: 1rem 0;
+  justify-content: flex-start;
 }
 
 .pixels-stage {

@@ -30,6 +30,7 @@ a {
 
 .prose {
   max-width: 38rem;
+  font-size: 1.2rem;
 }
 
 header {
@@ -64,6 +65,10 @@ header nav a {
 
 .bg-layer[data-bg="hero"] {
   background: linear-gradient(135deg, var(--red) 0%, var(--yellow) 50%, var(--blue) 100%);
+}
+
+.bg-layer[data-bg="intro"] {
+  background: linear-gradient(200deg, var(--ink) 0%, var(--blue) 78%);
 }
 
 .bg-layer[data-bg="context"] {
@@ -132,6 +137,56 @@ header nav a {
 
 .scroll-cue svg {
   animation: bounce 1.6s ease-in-out infinite;
+}
+
+.intro-thesis {
+  position: relative;
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 6rem 1.5rem 3rem;
+  text-align: center;
+}
+
+.intro-thesis-text {
+  position: relative;
+  z-index: 1;
+  max-width: 52rem;
+  margin: 0;
+  font-size: clamp(1.6rem, 3.6vw, 2.85rem);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--canvas);
+}
+
+.word {
+  display: inline-block;
+  padding: 0;
+  border: none;
+  font: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background: none;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.word:hover {
+  transform: translateY(-0.08em) rotate(-1.5deg);
+}
+
+.word.is-red {
+  color: var(--red);
+}
+
+.word.is-yellow {
+  color: var(--yellow);
 }
 
 .hero-shapes {
@@ -204,7 +259,7 @@ header nav a {
   }
 
   50% {
-    transform: translateY(-1.5rem);
+    transform: translateY(-3rem);
   }
 }
 
@@ -232,6 +287,12 @@ header nav a {
   }
 }
 
+/* The pixels beat's fixed background runs dark -- var(--ink) body text
+   would vanish against it, unlike the pale backgrounds behind context/light. */
+#pixels {
+  color: #f2ede1;
+}
+
 .beat-number {
   display: inline-flex;
   align-items: center;
@@ -247,7 +308,15 @@ header nav a {
 }
 
 .beat {
-  margin: 3rem 0;
+  margin: 0;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 5rem 0 3rem;
 }
 
 .contrast-stage {
@@ -332,8 +401,6 @@ header nav a {
 }
 
 .quiz {
-  margin-top: 3rem;
-  padding-top: 2rem;
   border-top: 1px solid #ddd;
 }
 
@@ -379,8 +446,6 @@ header nav a {
 }
 
 .drag-round {
-  margin-top: 3rem;
-  padding-top: 2rem;
   border-top: 1px solid #ddd;
 }
 
@@ -443,8 +508,6 @@ header nav a {
 }
 
 .wheel-round {
-  margin-top: 3rem;
-  padding-top: 2rem;
   border-top: 1px solid #ddd;
 }
 
@@ -729,8 +792,6 @@ header nav a {
 }
 
 .find-round {
-  margin-top: 3rem;
-  padding-top: 2rem;
   border-top: 1px solid #ddd;
 }
 
@@ -754,8 +815,6 @@ header nav a {
 }
 
 .pixel-preset-round {
-  margin-top: 3rem;
-  padding-top: 2rem;
   border-top: 1px solid #ddd;
 }
 

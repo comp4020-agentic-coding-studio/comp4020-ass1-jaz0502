@@ -24,6 +24,7 @@ import {
   type DragState,
 } from "./drag";
 import { pickActiveSection, type SectionVisibility } from "./background";
+import { nextIntroAccent, type IntroAccent } from "./intro";
 import {
   angleFromPointer,
   baseColor,
@@ -657,3 +658,13 @@ const bgObserver = new IntersectionObserver(
 );
 
 for (const section of bgSections) bgObserver.observe(section);
+
+const introWords = document.querySelectorAll<HTMLButtonElement>(".intro-thesis-text .word");
+for (const word of introWords) {
+  let accent: IntroAccent = null;
+  word.addEventListener("click", () => {
+    accent = nextIntroAccent(accent);
+    word.classList.remove("is-red", "is-yellow");
+    if (accent) word.classList.add(`is-${accent}`);
+  });
+}

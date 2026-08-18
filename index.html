@@ -9,6 +9,7 @@
   <body>
     <div class="bg-layers" aria-hidden="true">
       <div class="bg-layer" data-bg="hero"></div>
+      <div class="bg-layer" data-bg="intro"></div>
       <div class="bg-layer" data-bg="context"></div>
       <div class="bg-layer" data-bg="light"></div>
       <div class="bg-layer" data-bg="pixels"></div>
@@ -45,14 +46,58 @@
         </div>
       </section>
 
-      <div class="content">
-        <p class="prose">
-          What colour is a thing? Your visual system never actually measures that in isolation —
-          it reports colour by comparing a patch of light against whatever surrounds it. This page
-          proves it, one context at a time.
+      <section class="intro-thesis" id="intro-thesis" data-bg-id="intro" aria-label="What this page proves">
+        <div class="hero-shapes" aria-hidden="true">
+          <div class="hero-shape hero-shape-circle"></div>
+          <div class="hero-shape hero-shape-ring"></div>
+          <div class="hero-shape hero-shape-triangle"></div>
+          <div class="hero-shape hero-shape-arc"></div>
+          <div class="hero-shape hero-shape-dot"></div>
+        </div>
+        <p class="intro-thesis-text" data-testid="intro-thesis-text">
+          <button type="button" class="word">What</button>
+          <button type="button" class="word">colour</button>
+          <button type="button" class="word">is</button>
+          <button type="button" class="word">a</button>
+          <button type="button" class="word">thing?</button>
+          <button type="button" class="word">Your</button>
+          <button type="button" class="word">visual</button>
+          <button type="button" class="word">system</button>
+          <button type="button" class="word">never</button>
+          <button type="button" class="word">actually</button>
+          <button type="button" class="word">measures</button>
+          <button type="button" class="word">that</button>
+          <button type="button" class="word">in</button>
+          <button type="button" class="word">isolation</button>
+          —
+          <button type="button" class="word">it</button>
+          <button type="button" class="word">reports</button>
+          <button type="button" class="word">colour</button>
+          <button type="button" class="word">by</button>
+          <button type="button" class="word">comparing</button>
+          <button type="button" class="word">a</button>
+          <button type="button" class="word">patch</button>
+          <button type="button" class="word">of</button>
+          <button type="button" class="word">light</button>
+          <button type="button" class="word">against</button>
+          <button type="button" class="word">whatever</button>
+          <button type="button" class="word">surrounds</button>
+          <button type="button" class="word">it.</button>
+          <button type="button" class="word">This</button>
+          <button type="button" class="word">page</button>
+          <button type="button" class="word">proves</button>
+          <button type="button" class="word">it,</button>
+          <button type="button" class="word">one</button>
+          <button type="button" class="word">context</button>
+          <button type="button" class="word">at</button>
+          <button type="button" class="word">a</button>
+          <button type="button" class="word">time.</button>
         </p>
+      </section>
 
+      <div class="content">
         <section class="beat" id="context" data-bg-id="context" aria-labelledby="context-heading">
+        <div class="round context-intro">
           <h2 id="context-heading"><span class="beat-number">1</span> Context</h2>
           <p class="prose">The two squares below are exactly the same colour. Change what's around them.</p>
         <div class="contrast-stage" data-testid="contrast-stage">
@@ -85,8 +130,9 @@
         >
           Same square?
         </button>
+        </div>
 
-        <div class="quiz" data-testid="quiz">
+        <div class="quiz round" data-testid="quiz">
           <h3>Now guess</h3>
           <p class="prose">
             These two squares are exactly the same colour too. Which one looks darker?
@@ -114,7 +160,7 @@
           <p class="quiz-result" data-testid="quiz-result" aria-live="polite"></p>
         </div>
 
-        <div class="drag-round" data-testid="drag-round">
+        <div class="drag-round round" data-testid="drag-round">
           <h3>Now try it yourself</h3>
           <p class="prose">
             Same square, same colour. Drag it across the line and watch it change without
@@ -134,7 +180,7 @@
           <p class="drag-result" data-testid="drag-result" aria-live="polite"></p>
         </div>
 
-        <div class="wheel-round" data-testid="wheel-round">
+        <div class="wheel-round round" data-testid="wheel-round">
           <h3>Now go all the way around</h3>
           <p class="prose">
             It isn't just red and green. Rotate the surround through the whole colour wheel — the
@@ -170,6 +216,7 @@
       </section>
 
       <section class="beat" id="light" data-bg-id="light" aria-labelledby="light-heading">
+        <div class="round light-intro">
         <h2 id="light-heading"><span class="beat-number">2</span> Light</h2>
         <p class="prose">
           This apple has exactly one colour. Drag the light around it and watch that colour
@@ -219,8 +266,9 @@
             </div>
           </div>
         </div>
+        </div>
 
-        <div class="find-round" data-testid="find-round">
+        <div class="find-round round" data-testid="find-round">
           <h3>Can you find the true apple?</h3>
           <p class="prose">
             This apple is sitting under an exaggerated light. What colour is it really? Pick
@@ -257,6 +305,7 @@
       </section>
 
       <section class="beat" id="pixels" data-bg-id="pixels" aria-labelledby="pixels-heading">
+        <div class="round pixels-intro">
         <h2 id="pixels-heading"><span class="beat-number">3</span> Pixels</h2>
         <p class="prose">
           Every colour on this page, including this one, was made of neighbours the whole
@@ -307,8 +356,9 @@
             </div>
           </div>
         </div>
+        </div>
 
-        <div class="pixel-preset-round" data-testid="pixel-preset-round">
+        <div class="pixel-preset-round round" data-testid="pixel-preset-round">
           <h3>Now pick the pixels yourself</h3>
           <p class="prose">
             Purple isn't special — pick a different pair of subpixel colours and the same trick
@@ -363,11 +413,13 @@
           </div>
         </div>
 
+        <div class="round pixels-conclusion-round">
         <p class="prose pixels-conclusion" data-testid="pixels-conclusion">
           You can't always tell what's producing a colour just by looking at it. A grey patch
           borrowing colour from its surroundings, an apple lit by a tinted glow, a flat square
           hiding two subpixels — colour isn't simply what's there. It's what you perceive.
         </p>
+        </div>
       </section>
       </div>
     </main>

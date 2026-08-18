@@ -430,6 +430,12 @@ header nav a {
   border-color: #1a1a1a;
 }
 
+/* The darkest swatch's own fill is near-black, so the default dark border
+   would be invisible against it -- light grey shows the selection instead. */
+.swatch[data-shade="10"][aria-pressed="true"] {
+  border-color: #d0d0d0;
+}
+
 .reveal-toggle {
   display: block;
   margin: 2rem auto 0;
@@ -856,6 +862,15 @@ header nav a {
   border-top: 1px solid #ddd;
 }
 
+.find-round h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .find-scene {
   width: 12rem; /* smaller than the drag round's 16rem -- this is the secondary demo */
   height: 12rem;
@@ -880,10 +895,22 @@ header nav a {
   border-top: 1px solid #ddd;
 }
 
+.pixel-preset-round h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .pixels-prompt {
   margin: 0 0 0.75rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .pixels-square {
@@ -899,6 +926,19 @@ header nav a {
   box-shadow: 0 0 0 1px rgb(0 0 0 / 10%);
   overflow: hidden;
   transition: background-size 0.15s ease;
+}
+
+/* Both pixels squares enlarged past the shared 10rem default -- the guess
+   square carries the guess on its own, the preset square is this beat's
+   other hands-on round, so neither should read as an afterthought. */
+[data-testid="pixels-square"] {
+  width: 14rem;
+  height: 14rem;
+}
+
+[data-testid="preset-pixels-square"] {
+  width: 13rem;
+  height: 13rem;
 }
 
 .pixels-zoom-row {
@@ -976,5 +1016,15 @@ header nav a {
   .pixels-square {
     width: 8rem;
     height: 8rem;
+  }
+
+  [data-testid="pixels-square"] {
+    width: 11rem;
+    height: 11rem;
+  }
+
+  [data-testid="preset-pixels-square"] {
+    width: 10rem;
+    height: 10rem;
   }
 }

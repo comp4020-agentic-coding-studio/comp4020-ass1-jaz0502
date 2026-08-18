@@ -1,8 +1,8 @@
 import {
-  HUES,
+  SHADES,
   initialState,
   patchColor,
-  setZoneHue,
+  setZoneShade,
   toggleReveal,
   zoneBackground,
   type ContrastState,
@@ -79,13 +79,13 @@ import {
   type WheelState,
 } from "./wheel";
 
-const HUE_NAMES: Record<number, string> = {
-  0: "Red",
-  60: "Yellow",
-  120: "Green",
-  180: "Cyan",
-  240: "Blue",
-  300: "Magenta",
+const SHADE_NAMES: Record<number, string> = {
+  10: "Near black",
+  25: "Dark grey",
+  40: "Mid-dark grey",
+  60: "Mid-light grey",
+  75: "Light grey",
+  90: "Near white",
 };
 
 const ZONES: Zone[] = ["a", "b"];
@@ -111,15 +111,15 @@ function swatchContainer(zone: Zone) {
 function buildSwatches(zone: Zone) {
   const container = swatchContainer(zone);
   if (!container) return;
-  for (const hue of HUES) {
+  for (const shade of SHADES) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "swatch";
-    button.style.backgroundColor = `hsl(${hue}, 82%, 40%)`;
-    button.setAttribute("aria-label", HUE_NAMES[hue] ?? `Hue ${hue}`);
-    button.dataset.hue = String(hue);
+    button.style.backgroundColor = `hsl(0, 0%, ${shade}%)`;
+    button.setAttribute("aria-label", SHADE_NAMES[shade] ?? `Grey ${shade}%`);
+    button.dataset.shade = String(shade);
     button.addEventListener("click", () => {
-      state = setZoneHue(state, zone, hue);
+      state = setZoneShade(state, zone, shade);
       render();
     });
     container.append(button);
@@ -139,10 +139,10 @@ function render() {
       readout.setAttribute("aria-hidden", String(!state.revealed));
     }
 
-    const activeHue = zone === "a" ? state.zoneA : state.zoneB;
+    const activeShade = zone === "a" ? state.zoneA : state.zoneB;
     for (const button of swatchContainer(zone)?.querySelectorAll<HTMLButtonElement>(".swatch") ??
       []) {
-      button.setAttribute("aria-pressed", String(Number(button.dataset.hue) === activeHue));
+      button.setAttribute("aria-pressed", String(Number(button.dataset.shade) === activeShade));
     }
   }
 
@@ -205,8 +205,8 @@ function renderDrag() {
   if (dragSlider) dragSlider.value = String(dragState.position);
   if (dragResult) {
     const side = sideFromPosition(dragState.position);
-    const half = side === "left" ? "dark" : "light";
-    dragResult.textContent = `Now over the ${half} half — still exactly ${dragPatchColor()}.`;
+    dragResult.textContent =
+      side === "middle" ? "" : `Now over the ${side === "left" ? "dark" : "light"} half — still exactly ${dragPatchColor()}.`;
   }
 }
 

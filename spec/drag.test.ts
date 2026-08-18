@@ -30,6 +30,10 @@ describe("DRAG: moving the patch never changes its colour", () => {
     expect(sideFromPosition(90)).toBe("right");
   });
 
+  it("reports no side while sitting exactly on the boundary", () => {
+    expect(sideFromPosition(50)).toBe("middle");
+  });
+
   it("setPosition clamps through state", () => {
     const state = setPosition({ position: 20 }, 200);
     expect(state.position).toBe(100);

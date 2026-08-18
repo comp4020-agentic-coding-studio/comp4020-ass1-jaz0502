@@ -28,8 +28,10 @@ export function dragPatchColor(): string {
   return DRAG_PATCH_COLOR;
 }
 
-export type DragSide = "left" | "right";
+export type DragSide = "left" | "right" | "middle";
 
 export function sideFromPosition(position: number): DragSide {
-  return position < 50 ? "left" : "right";
+  if (position < 50) return "left";
+  if (position > 50) return "right";
+  return "middle";
 }

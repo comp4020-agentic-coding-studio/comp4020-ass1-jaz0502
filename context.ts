@@ -7,7 +7,9 @@ export type Zone = "a" | "b";
 export const PATCH_COLOR = "#808080";
 const NEUTRAL_BG = "#e7e4df";
 
-export const HUES = [0, 60, 120, 180, 240, 300] as const;
+// Lightness percentages, not hues -- the induction here is brightness
+// contrast, not colour contrast, so the surrounds are pure greys.
+export const SHADES = [10, 25, 40, 60, 75, 90] as const;
 
 export interface ContrastState {
   zoneA: number;
@@ -15,22 +17,27 @@ export interface ContrastState {
   revealed: boolean;
 }
 
-// Red and green sit on one of the eye's two opponent channels, which is why
-// this pair, not an arbitrary one, gives the strongest induction by default.
+// A dark surround and a light surround give the strongest brightness
+// contrast by default -- the same grey patch reads lighter against the dark
+// zone and darker against the light one.
 export function initialState(): ContrastState {
-  return { zoneA: 0, zoneB: 120, revealed: false };
+  return { zoneA: 10, zoneB: 90, revealed: false };
 }
 
-export function setZoneHue(state: ContrastState, zone: Zone, hue: number): ContrastState {
-  return zone === "a" ? { ...state, zoneA: hue } : { ...state, zoneB: hue };
+export function setZoneShade(state: ContrastState, zone: Zone, shade: number): ContrastState {
+  return zone === "a" ? { ...state, zoneA: shade } : { ...state, zoneB: shade };
 }
 
 export function toggleReveal(state: ContrastState): ContrastState {
   return { ...state, revealed: !state.revealed };
 }
 
-// More saturated and slightly darker than a "safe" pastel: induction scales
-// with how strongly the surround itself reads as coloured.
+export function shadeToBackground(shade: number): string {
+  return `hsl(0, 0%, ${shade}%)`;
+}
+
+// Kept for the wheel round further down CONTEXT, which stays hue-based --
+// only the swatch buttons above it switched to grey shades.
 export function hueToBackground(hue: number): string {
   return `hsl(${hue}, 82%, 40%)`;
 }
@@ -42,5 +49,5 @@ export function patchColor(): string {
 
 export function zoneBackground(state: ContrastState, zone: Zone): string {
   if (state.revealed) return NEUTRAL_BG;
-  return hueToBackground(zone === "a" ? state.zoneA : state.zoneB);
+  return shadeToBackground(zone === "a" ? state.zoneA : state.zoneB);
 }

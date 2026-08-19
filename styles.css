@@ -33,6 +33,26 @@ a {
   font-size: 1.2rem;
 }
 
+.context-explainer {
+  max-width: 32rem;
+  margin-top: 1rem;
+  padding: 1.25rem 1.5rem;
+  border: 1.5px solid var(--red);
+  border-radius: 0.75rem;
+  background: #fff;
+  font-size: 1.05rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.context-explainer strong {
+  color: var(--red);
+}
+
+.context-explainer[aria-hidden="false"] {
+  opacity: 1;
+}
+
 header {
   position: fixed;
   inset: 0 0 auto;
@@ -891,6 +911,11 @@ header nav a {
   margin: 0.75rem 0;
 }
 
+.pixel-preset-round .light-presets {
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
 .pixel-preset-round {
   border-top: 1px solid #ddd;
 }
@@ -1027,4 +1052,90 @@ header nav a {
     width: 10rem;
     height: 10rem;
   }
+}
+
+/* The page's closing statement -- same high-contrast, oversized-statement
+   treatment as .intro-thesis, so the thesis it opened with is the thesis it
+   closes on. */
+.pixels-conclusion-round {
+  position: relative;
+  z-index: 1;
+  width: min(94vw, 68rem);
+  margin-left: 50%;
+  overflow: hidden;
+  align-items: center;
+  padding: 2.5rem 3rem;
+  text-align: center;
+  background: var(--ink);
+  border-radius: 1.5rem;
+  transform: translateX(-50%);
+}
+
+.pixels-conclusion {
+  position: relative;
+  z-index: 1;
+  max-width: 58rem;
+  margin: 0 auto;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--canvas);
+}
+
+.pixels-conclusion strong {
+  color: var(--yellow);
+}
+
+.closing-nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}
+
+.closing-nav-link {
+  padding: 0.6rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  transition: transform 0.15s ease;
+}
+
+.closing-nav-link:hover {
+  transform: translateY(-0.15em);
+}
+
+.closing-nav-link[data-beat="context"] {
+  border-color: var(--red);
+}
+
+.closing-nav-link[data-beat="light"] {
+  border-color: var(--yellow);
+}
+
+.closing-nav-link[data-beat="pixels"] {
+  border-color: var(--blue);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* LIGHT's own accent (matches its yellow beat-number) instead of CONTEXT's red. */
+#light .context-explainer {
+  border-color: var(--yellow);
+}
+
+#light .context-explainer strong {
+  color: #a67c00;
 }

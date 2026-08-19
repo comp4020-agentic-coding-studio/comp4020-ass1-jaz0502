@@ -24,7 +24,7 @@
         <p class="hero-kicker">Colour has neighbours</p>
         <h1 class="hero-title">THE COLOUR<br />YOU SEE</h1>
         <p class="hero-subtitle">isn't always the colour that's there.</p>
-        <a class="scroll-cue" href="#context">
+        <a class="scroll-cue" href="#intro-thesis">
           <span>Scroll</span>
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
             <path
@@ -155,6 +155,12 @@
         >
           Same square?
         </button>
+        <p class="prose context-explainer" data-testid="context-explainer" aria-hidden="true">
+          This is <strong>simultaneous contrast</strong>: your visual system never reads a colour
+          on its own, it reads it relative to whatever sits next to it. Against a dark surround,
+          the patch's mid-grey looks lighter by comparison; against a light surround, the same
+          grey looks darker. The patch's actual value never moved &mdash; only the comparison did.
+        </p>
         </div>
 
         <div class="quiz round" data-testid="quiz">
@@ -181,6 +187,11 @@
             </button>
           </div>
           <p class="quiz-result" data-testid="quiz-result" aria-live="polite"></p>
+          <p class="prose context-explainer" data-testid="quiz-explainer" aria-hidden="true">
+            Most people call the square on the paler background <strong>darker</strong> &mdash;
+            the opposite of what its own value would predict. Your eye is still judging by
+            contrast against the surround, exactly like the demo above.
+          </p>
         </div>
 
         <div class="drag-round round" data-testid="drag-round">
@@ -201,6 +212,11 @@
             />
           </div>
           <p class="drag-result" data-testid="drag-result" aria-live="polite"></p>
+          <p class="prose context-explainer" data-testid="drag-explainer" aria-hidden="true">
+            Watch the square lighten as it crosses onto the dark half and darken as it crosses
+            onto the pale half &mdash; that's your hand moving its <strong>position</strong>, not
+            its colour. The value under your cursor never changes; only what's next to it does.
+          </p>
         </div>
 
         <div class="wheel-round round" data-testid="wheel-round">
@@ -314,6 +330,11 @@
             </div>
           </div>
         </div>
+        <p
+          class="prose context-explainer"
+          data-testid="light-explainer"
+          aria-hidden="true"
+        ></p>
         </div>
 
         <div class="find-round round" data-testid="find-round">
@@ -486,11 +507,26 @@
         </div>
 
         <div class="round pixels-conclusion-round">
-        <p class="prose pixels-conclusion" data-testid="pixels-conclusion">
+        <div class="hero-shapes" aria-hidden="true">
+          <div class="hero-shape hero-shape-circle"></div>
+          <div class="hero-shape hero-shape-ring"></div>
+          <div class="hero-shape hero-shape-triangle"></div>
+          <div class="hero-shape hero-shape-arc"></div>
+          <div class="hero-shape hero-shape-dot"></div>
+        </div>
+        <p class="pixels-conclusion" data-testid="pixels-conclusion">
           You can't always tell what's producing a colour just by looking at it. A grey patch
           borrowing colour from its surroundings, an apple lit by a tinted glow, a flat square
-          hiding two subpixels — colour isn't simply what's there. It's what you perceive.
+          hiding two subpixels —
+          <strong>colour isn't simply what's there. It's what you perceive.</strong>
         </p>
+
+        <nav class="closing-nav" aria-label="Jump to a section">
+          <a class="closing-nav-link closing-nav-link-top" href="#hero">Back to top</a>
+          <a class="closing-nav-link" data-beat="context" href="#context">Context</a>
+          <a class="closing-nav-link" data-beat="light" href="#light">Light</a>
+          <a class="closing-nav-link" data-beat="pixels" href="#pixels">Pixels</a>
+        </nav>
         </div>
       </section>
       </div>

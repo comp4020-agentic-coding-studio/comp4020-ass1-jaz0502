@@ -94,6 +94,7 @@ let state: ContrastState = initialState();
 
 const stage = document.querySelector<HTMLElement>('[data-testid="contrast-stage"]');
 const revealButton = document.querySelector<HTMLButtonElement>('[data-testid="reveal-toggle"]');
+const contextExplainer = document.querySelector<HTMLElement>('[data-testid="context-explainer"]');
 
 function zoneEl(zone: Zone) {
   return document.querySelector<HTMLElement>(`.contrast-zone[data-zone="${zone}"]`);
@@ -151,6 +152,7 @@ function render() {
     revealButton.setAttribute("aria-pressed", String(state.revealed));
     revealButton.textContent = state.revealed ? "Change it back" : "Same square?";
   }
+  contextExplainer?.setAttribute("aria-hidden", String(!state.revealed));
 }
 
 buildSwatches("a");
@@ -170,6 +172,7 @@ const quizZones: Record<QuizSide, HTMLButtonElement | null> = {
   right: document.querySelector('[data-testid="quiz-right"]'),
 };
 const quizResult = document.querySelector<HTMLElement>('[data-testid="quiz-result"]');
+const quizExplainer = document.querySelector<HTMLElement>('[data-testid="quiz-explainer"]');
 
 function renderQuiz() {
   for (const side of QUIZ_SIDES) {
@@ -186,6 +189,7 @@ function renderQuiz() {
       ? `You picked the ${quizState.guess} square. Both are exactly ${quizPatchColor(quizState.guess)} — only the background changed.`
       : "";
   }
+  quizExplainer?.setAttribute("aria-hidden", String(quizState.guess === null));
 }
 
 for (const side of QUIZ_SIDES) {
@@ -200,14 +204,16 @@ let dragState: DragState = initialDragState();
 
 const dragSlider = document.querySelector<HTMLInputElement>('[data-testid="drag-slider"]');
 const dragResult = document.querySelector<HTMLElement>('[data-testid="drag-result"]');
+const dragExplainer = document.querySelector<HTMLElement>('[data-testid="drag-explainer"]');
 
 function renderDrag() {
   if (dragSlider) dragSlider.value = String(dragState.position);
+  const side = sideFromPosition(dragState.position);
   if (dragResult) {
-    const side = sideFromPosition(dragState.position);
     dragResult.textContent =
       side === "middle" ? "" : `Now over the ${side === "left" ? "dark" : "light"} half — still exactly ${dragPatchColor()}.`;
   }
+  dragExplainer?.setAttribute("aria-hidden", String(side === "middle"));
 }
 
 dragSlider?.addEventListener("input", () => {
@@ -305,6 +311,20 @@ const lightBaseSwatch = document.querySelector<HTMLElement>('[data-testid="light
 const lightBaseReadout = document.querySelector<HTMLElement>('[data-testid="light-base-readout"]');
 const lightLiveSwatch = document.querySelector<HTMLElement>('[data-testid="light-live-swatch"]');
 const lightLiveReadout = document.querySelector<HTMLElement>('[data-testid="light-live-readout"]');
+const lightExplainer = document.querySelector<HTMLElement>('[data-testid="light-explainer"]');
+
+// Keyed to PRESET_TINT/SHADOW_TINT in light.ts: sunlight is near-white so it
+// barely tints, candlelight/LED skew hard in opposite directions -- and each
+// preset's shadow bounces toward the *complementary* hue of its own tint.
+const LIGHT_EXPLAINER_TEXT: Record<LightPreset, string> = {
+  sunlight:
+    "<strong>Sunlight</strong> is close to white, so it barely tints the apple — most of what you're seeing shift is shading, not colour.",
+  candlelight:
+    "<strong>Candlelight</strong> skews orange, so it mixes an orange tint into the highlight — and the shadow's bounce light skews the opposite way, toward blue.",
+  led: "This <strong>LED</strong> skews cool blue, so it mixes a blue tint into the highlight — and the shadow's bounce light skews the opposite way, toward orange.",
+};
+
+let lightInteracted = false;
 
 function buildLightPresets() {
   if (!lightPresetsContainer) return;
@@ -316,6 +336,7 @@ function buildLightPresets() {
     button.textContent = LIGHT_PRESET_LABELS[preset];
     button.addEventListener("click", () => {
       lightState = setPreset(lightState, preset);
+      lightInteracted = true;
       renderLight();
     });
     lightPresetsContainer.append(button);
@@ -353,6 +374,11 @@ function renderLight() {
     []) {
     button.setAttribute("aria-pressed", String(button.dataset.preset === lightState.preset));
   }
+
+  if (lightExplainer) {
+    lightExplainer.innerHTML = LIGHT_EXPLAINER_TEXT[lightState.preset];
+    lightExplainer.setAttribute("aria-hidden", String(!lightInteracted));
+  }
 }
 
 let draggingLight = false;
@@ -375,6 +401,7 @@ lightHandle?.addEventListener("pointermove", (event) => {
   const angle = angleFromEvent(event);
   if (angle === null) return;
   lightState = setAngle(lightState, angle);
+  lightInteracted = true;
   renderLight();
 });
 
@@ -385,10 +412,12 @@ lightHandle?.addEventListener("pointerup", () => {
 lightHandle?.addEventListener("keydown", (event) => {
   if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
     lightState = setAngle(lightState, lightState.angle - 5);
+    lightInteracted = true;
     renderLight();
     event.preventDefault();
   } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
     lightState = setAngle(lightState, lightState.angle + 5);
+    lightInteracted = true;
     renderLight();
     event.preventDefault();
   }

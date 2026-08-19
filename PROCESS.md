@@ -19,7 +19,7 @@ A second important moment was deciding not to include an interactive colour-mixi
 **Moment 3 - Turning experiments into an explainer**
 
 A third moment was improving the website into more of an explainer. After creating the basic design and layout, it was visually engaging but initially felt like a series of experiments rather than something that explained why the effects occurred. Instead of simply adding more descriptive text, I directed Claude to integrate explanations into the interactions through clearer labels, transitions and explanations after each experiment. This shifted the website from demonstrating colour illusions to teaching the central idea that colour perception is influenced by context, light and the visual system.
- [commit reference]
+ [dc08bc8](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-jaz0502/commit/dc08bc8)
 
 **Moment 4 - Verifying the pixels illusion**
 

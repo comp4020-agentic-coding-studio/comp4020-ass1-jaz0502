@@ -8,6 +8,7 @@
 
 body {
   margin: 0;
+  overflow-x: hidden;
   font-family: system-ui, sans-serif;
   line-height: 1.6;
   color: var(--ink);
@@ -61,15 +62,30 @@ header {
 }
 
 header nav a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
   font-weight: 700;
   color: var(--ink);
   text-decoration: none;
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+header nav a:hover {
+  box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+  transform: translateY(-2px);
 }
 
 .bg-layers {
   position: fixed;
   inset: 0;
   z-index: -1;
+  overflow: hidden;
 }
 
 .bg-layer {
@@ -81,6 +97,101 @@ header nav a {
 
 .bg-layer.is-active {
   opacity: 1;
+}
+
+/* Large Bauhaus primitives bled off the left/right edge of the fixed
+   background -- one shape-colour pair per beat (circle/blue, square/red,
+   triangle/yellow), so the backdrop keeps composing itself as you scroll
+   instead of sitting as flat gradients. Sized in vw so the same rules read
+   the same way at both marking viewports. */
+.bg-layer::before,
+.bg-layer::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.bg-layer[data-bg="intro"]::before {
+  top: 10%;
+  left: -16vw;
+  width: 40vw;
+  height: 40vw;
+  border-radius: 50%;
+  background: var(--blue);
+  opacity: 0.28;
+}
+
+.bg-layer[data-bg="context"]::after {
+  right: -14vw;
+  bottom: -10vw;
+  width: 32vw;
+  height: 32vw;
+  background: var(--red);
+  opacity: 0.16;
+  transform: rotate(18deg);
+}
+
+.bg-layer[data-bg="light"]::after {
+  top: 8%;
+  right: -13vw;
+  width: 34vw;
+  height: 34vw;
+  background: var(--yellow);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  opacity: 0.28;
+}
+
+.bg-layer[data-bg="pixels"]::before {
+  top: 18%;
+  left: -12vw;
+  width: 30vw;
+  height: 30vw;
+  background: var(--red);
+  opacity: 0.3;
+  transform: rotate(10deg);
+}
+
+.bg-layer[data-bg="pixels"]::after {
+  right: -8vw;
+  bottom: 12%;
+  width: 20vw;
+  height: 20vw;
+  background: var(--blue);
+  opacity: 0.3;
+  transform: rotate(-8deg);
+}
+
+@media (width <= 40rem) {
+  .bg-layer[data-bg="intro"]::before,
+  .bg-layer[data-bg="context"]::after,
+  .bg-layer[data-bg="light"]::after,
+  .bg-layer[data-bg="pixels"]::before,
+  .bg-layer[data-bg="pixels"]::after {
+    width: 60vw;
+    height: 60vw;
+  }
+
+  .bg-layer[data-bg="intro"]::before {
+    left: -30vw;
+  }
+
+  .bg-layer[data-bg="context"]::after {
+    right: -28vw;
+  }
+
+  .bg-layer[data-bg="light"]::after {
+    right: -26vw;
+  }
+
+  .bg-layer[data-bg="pixels"]::before {
+    left: -24vw;
+  }
+
+  .bg-layer[data-bg="pixels"]::after {
+    right: -16vw;
+    width: 34vw;
+    height: 34vw;
+  }
 }
 
 .bg-layer[data-bg="hero"] {
@@ -953,17 +1064,14 @@ header nav a {
   transition: background-size 0.15s ease;
 }
 
-/* Both pixels squares enlarged past the shared 10rem default -- the guess
-   square carries the guess on its own, the preset square is this beat's
-   other hands-on round, so neither should read as an afterthought. */
-[data-testid="pixels-square"] {
+/* Both pixels squares enlarged past the shared 10rem default and matched to
+   each other -- the guess square carries the guess on its own, the preset
+   square is this beat's other hands-on round, so neither should read as
+   smaller or more of an afterthought than the other. */
+[data-testid="pixels-square"],
+[data-testid="preset-pixels-square"] {
   width: 14rem;
   height: 14rem;
-}
-
-[data-testid="preset-pixels-square"] {
-  width: 13rem;
-  height: 13rem;
 }
 
 .pixels-zoom-row {
@@ -1043,14 +1151,10 @@ header nav a {
     height: 8rem;
   }
 
-  [data-testid="pixels-square"] {
+  [data-testid="pixels-square"],
+  [data-testid="preset-pixels-square"] {
     width: 11rem;
     height: 11rem;
-  }
-
-  [data-testid="preset-pixels-square"] {
-    width: 10rem;
-    height: 10rem;
   }
 }
 
